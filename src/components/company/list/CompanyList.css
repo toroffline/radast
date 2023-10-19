@@ -1,0 +1,16 @@
+.company {
+    padding: 20px;
+    margin-bottom: 0.5rem;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.company:hover {
+    cursor: pointer;
+}
+
+.company-pic {
+    height: 20px;
+    width: 20px;
+    margin-right: 0.5rem;
+}
