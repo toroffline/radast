@@ -1,13 +1,11 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
-import './App.css';
-import SideBar from './components/sideBar/SideBar';
 import Layout from './layout/Layout';
+import './App.css';
 
 function App() {
     return (
         <div className="app">
-            <SideBar />
             <Router />
         </div>
     );
@@ -29,17 +27,17 @@ function Router() {
     return (
         <BrowserRouter>
             <Suspense fallback={<Loading />}>
-                <Layout>
-                    <Routes>
+                <Routes>
+                    <Route element={<Layout />}>
                         <Route path="/company/list" element={<CompanyList />} />
                         <Route
                             path="/company/detail/:companyId"
                             element={<CompanyDetail />}
                         />
-                        <Route path="/user" element={<>dummy</>} />
                         <Route path="*" element={<WildCardRedirect />} />
-                    </Routes>
-                </Layout>
+                    </Route>
+                    <Route path="/user" element={<>dummy</>} />
+                </Routes>
             </Suspense>
         </BrowserRouter>
     );

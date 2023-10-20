@@ -6,7 +6,7 @@
 .main {
     display: flex;
     flex-direction: column;
-    padding: 40px 100px;
+    padding: 40px 30px 40px 100px;
     flex-grow: 1;
     background-color: #e6e6e6;
 }
