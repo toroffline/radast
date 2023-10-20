@@ -1,75 +1,81 @@
-import { useEffect, useMemo, useState } from 'react'
-import companyService from '../../../services/companyService'
-import './CompanyList.css'
+import { useEffect, useMemo, useState } from 'react';
+import companyService from '../../../services/companyService';
+import './CompanyList.css';
+import { useNavigate } from 'react-router-dom';
 
 function CompanyList() {
-    const [companyList, setCompanyList] = useState([])
-    const [language, setLanguage] = useState('en')
+    const [companyList, setCompanyList] = useState([]);
+    const [language, setLanguage] = useState('en');
+    const navigate = useNavigate();
 
     function changeLanguage() {
-        setLanguage(language === 'th' ? 'en' : 'th')
+        setLanguage(language === 'th' ? 'en' : 'th');
+    }
+
+    function navigateToDetail(companyId) {
+        navigate(`/company/detail/${companyId}`);
     }
 
     useEffect(() => {
         async function fetchData() {
-            const data = await companyService.getList()
-            console.log(data)
-            setCompanyList(data)
+            const data = await companyService.getList();
+            console.log(data);
+            setCompanyList(data);
         }
-        fetchData()
-    }, [])
+        fetchData();
+    }, []);
 
     return (
-        <div className="content">
-            <button onClick={() => changeLanguage()}>change lang</button>
+        <>
             {companyList &&
                 companyList.map((company, index) => (
                     <Company
                         {...company}
+                        navigateToDetail={navigateToDetail}
                         language={language}
                         key={`company-${index}`}
                     />
                 ))}
-        </div>
-    )
+        </>
+    );
 }
 
 function Company(props) {
-    const { keywords: _keywords, marketCap, name, fType } = props
-    const { language } = props
+    const {
+        keywordDisplay,
+        marketCapDisplay,
+        name,
+        fType,
+        id,
+        url,
+        navigateToDetail,
+    } = props;
+    const { language } = props;
     const companyName = useMemo(() => {
-        return language ? name[language] : name['en']
-    }, [name, language])
-
-    const keywords = useMemo(
-        () =>
-            _keywords && _keywords.length > 0
-                ? _keywords.join(', ')
-                : undefined,
-        [_keywords]
-    )
+        return language ? name[language] : name['en'];
+    }, [name, language]);
 
     return (
-        <div className="company">
+        <div className="company" onClick={() => navigateToDetail(id)}>
             <div className="company-info">
                 <div className="company-name">
                     <img src="./logo192.png" className="company-pic" />
                     <strong>{companyName}</strong>
                     <div>
-                        <small>Market Cap: {marketCap}</small>
+                        <small>Market Cap: {marketCapDisplay}</small>
                     </div>
                 </div>
                 <div>F Type: {fType}</div>
                 <div>
                     <strong>Website:</strong>{' '}
-                    <a href="http://www.apexpcl.com" target="_blank">
-                        www.apexpcl.com
+                    <a href={url} target="_blank">
+                        {url}
                     </a>
                 </div>
-                {keywords ? <div>keywords: {keywords}</div> : <></>}
+                {keywordDisplay ? <div>keywords: {keywordDisplay}</div> : <></>}
             </div>
         </div>
-    )
+    );
 }
 
-export default CompanyList
+export default CompanyList;

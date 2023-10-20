@@ -1,7 +1,7 @@
 class CompanyService {
-    #companyList
+    #companyList;
     constructor(companyList) {
-        this.#companyList = this.regenerateCompanyList(companyList)
+        this.#companyList = this.regenerateCompanyList(companyList);
     }
 
     regenerateCompanyList(companyListRaw) {
@@ -9,10 +9,12 @@ class CompanyService {
             ? companyListRaw.map((company, index) => ({
                   id: company.id || index,
                   aliasName: company.N_name,
-                  keywords: company.N_shortname
-                      ? company.N_shortname.split(' ')
-                      : [],
-                  marketCap: company.marketcap,
+                  keywordDisplay: company.N_shortname
+                      ? company.N_shortname.split(' ').join(', ')
+                      : undefined,
+                  marketCapDisplay: company.marketcap
+                      ? company.marketcap.toLocaleString()
+                      : undefined,
                   name: {
                       th: company.N_COMPANY_T,
                       en: company.N_COMPANY_E,
@@ -25,11 +27,15 @@ class CompanyService {
                   },
                   fullName: company.N_fullname,
               }))
-            : []
+            : [];
     }
 
     async getList() {
-        return this.#companyList
+        return this.#companyList;
+    }
+
+    async getDetail(companyId) {
+        return this.#companyList.find((company) => company.id === companyId);
     }
 }
 
@@ -411,8 +417,8 @@ const mockCompanyList = [
             'พัฒนาอสังหาริมทรัพย์ประเภท 1) ที่อยู่อาศัย ทั้งบ้านและที่ดินจัดสรร อาคารชุด ในทำเลทั่วเขตกรุงเทพมหานคร ปริมณฑล รวมถึงต่างจังหวัด 2) เพื่อการพาณิชย์ ได้แก่ อาคารสำนักงานให้เช่า  และ 3) ธุรกิจรีสอร์ทโรงแรมในต่างจังหวัด',
         N_fullname: 'SUPALAI PUBLIC COMPANY LIMITED',
     },
-]
+];
 
-const companyService = new CompanyService(mockCompanyList)
+const companyService = new CompanyService(mockCompanyList);
 
-export default companyService
+export default companyService;

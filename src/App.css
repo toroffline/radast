@@ -6,7 +6,7 @@
 .main {
     display: flex;
     flex-direction: column;
-    padding: 20px 80px;
+    padding: 40px 100px;
     flex-grow: 1;
     background-color: #e6e6e6;
 }
@@ -17,9 +17,5 @@
 }
 
 .header {
-    padding: 20px;
-}
-
-.content {
     padding: 20px;
 }
