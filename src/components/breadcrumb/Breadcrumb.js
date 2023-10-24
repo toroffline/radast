@@ -1,26 +1,19 @@
-import { Link } from 'react-router-dom';
+import { Breadcrumb as BreadcrumbFlow } from 'flowbite-react';
 
 function Breadcrumb(props) {
     const { values } = props;
 
     return (
-        <div className="breadcrumb">
+        <BreadcrumbFlow>
             {values.map((breadcrumb, index) => (
-                <span key={`breadcrumb-${index}`}>
-                    {breadcrumb.redirect ? (
-                        <Link
-                            className="breadcrumb-link"
-                            to={breadcrumb.redirect}
-                        >
-                            {breadcrumb.display}
-                        </Link>
-                    ) : (
-                        <span>{breadcrumb.display}</span>
-                    )}
-                    {index !== values.length - 1 && <> / </>}
-                </span>
+                <BreadcrumbFlow.Item
+                    href={breadcrumb.redirect}
+                    key={`breadcrub-${breadcrumb.display.toLowerCase()}-index`}
+                >
+                    <p>{breadcrumb.display}</p>
+                </BreadcrumbFlow.Item>
             ))}
-        </div>
+        </BreadcrumbFlow>
     );
 }
 

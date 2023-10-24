@@ -1,16 +1,13 @@
-.company {
-    padding: 20px;
-    margin-bottom: 0.5rem;
-    background-color: #fff;
-    border-radius: 5px;
+th {
+    white-space: nowrap;
 }
 
-.company:hover {
+tr {
     cursor: pointer;
 }
 
-.company-pic {
-    height: 20px;
-    width: 20px;
-    margin-right: 0.5rem;
+.company-logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 1rem;
 }
