@@ -1,16 +1,51 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import companyService from '../../../services/companyService';
-import './CompanyList.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { Table } from 'flowbite-react';
+import { Card, Table, TextInput } from 'flowbite-react';
+import { FiSearch, FiTrendingDown, FiTrendingUp } from 'react-icons/fi';
+
+import './CompanyList.css';
+const defaultSorting = {
+    isActive: false,
+    sortDirection: 'desc',
+};
 
 function CompanyList() {
-    const [companyList, setCompanyList] = useState([]);
-    const [language, setLanguage] = useState('en');
     const navigate = useNavigate();
+    const [companyList, setCompanyList] = useState([]);
+    const [sorting, setSorting] = useState({
+        companyName: {
+            display: 'Company Name',
+            isActive: true,
+            sortDirection: 'asc',
+        },
+        marketCap: {
+            display: 'Market Cap',
+            isActive: false,
+            sortDirection: 'asc',
+        },
+    });
 
-    function changeLanguage() {
-        setLanguage(language === 'th' ? 'en' : 'th');
+    function onClickSorting(field) {
+        const tempSorting = { ...sorting };
+        Object.keys(tempSorting).forEach((sortField) => {
+            if (sortField === field) {
+                if (tempSorting[field].isActive) {
+                    tempSorting[field].sortDirection =
+                        tempSorting[field].sortDirection === 'asc'
+                            ? 'desc'
+                            : 'asc';
+                } else {
+                    tempSorting[field].isActive = true;
+                }
+            } else {
+                tempSorting[sortField] = {
+                    ...tempSorting[sortField],
+                    ...defaultSorting,
+                };
+            }
+        });
+        setSorting(tempSorting);
     }
 
     function navigateToDetail(companyId) {
@@ -28,100 +63,93 @@ function CompanyList() {
 
     return (
         <>
-            {/* {companyList &&
-                companyList.map((company, index) => (
-                    <Company
-                        {...company}
-                        navigateToDetail={navigateToDetail}
-                        language={language}
-                        key={`company-${index}`}
+            <Card>
+                <div>
+                    <TextInput
+                        className="company-input-search"
+                        icon={FiSearch}
+                        placeholder="Company name, Alias name"
                     />
-                ))} */}
-            <Table hoverable>
-                <Table.Head>
-                    <Table.HeadCell>Company Name</Table.HeadCell>
-                    <Table.HeadCell className="text-center">
-                        F Type
-                    </Table.HeadCell>
-                    <Table.HeadCell className="text-right">
-                        Market Cap
-                    </Table.HeadCell>
-                    <Table.HeadCell>Actions</Table.HeadCell>
-                </Table.Head>
-                <Table.Body className="divide-y">
-                    {companyList.map((company, index) => (
-                        <Table.Row
-                            className="bg-white"
-                            key={`company-list-${index}`}
-                            onClick={() => navigateToDetail(company.id)}
-                        >
-                            <Table.Cell>
-                                <div className="flex">
-                                    <img
-                                        src="/favicon.ico"
-                                        className="company-logo"
-                                        alt="company logo"
-                                    />
-                                    <div>
-                                        <h3>{company.aliasName}</h3>
-                                        <small>{company.name['en']}</small>
+                </div>
+
+                <Table hoverable>
+                    <Table.Head>
+                        <TableHeaderSortable
+                            {...sorting.companyName}
+                            onClickSorting={() => onClickSorting('companyName')}
+                        />
+                        <Table.HeadCell className="text-center">
+                            F Type
+                        </Table.HeadCell>
+                        <TableHeaderSortable
+                            {...sorting.marketCap}
+                            onClickSorting={() => onClickSorting('marketCap')}
+                            className="text-right"
+                        />
+                        <Table.HeadCell>Actions</Table.HeadCell>
+                    </Table.Head>
+                    <Table.Body className="divide-y">
+                        {companyList.map((company, index) => (
+                            <Table.Row
+                                className="bg-white"
+                                key={`company-list-${index}`}
+                                onClick={() => navigateToDetail(company.id)}
+                            >
+                                <Table.Cell>
+                                    <div className="flex">
+                                        <img
+                                            src="/favicon.ico"
+                                            className="company-logo"
+                                            alt="company logo"
+                                        />
+                                        <div>
+                                            <h3>{company.aliasName}</h3>
+                                            <small>{company.name['en']}</small>
+                                        </div>
                                     </div>
-                                </div>
-                            </Table.Cell>
-                            <Table.Cell className="text-center">
-                                {company.fType}
-                            </Table.Cell>
-                            <Table.Cell className="text-right">
-                                {company.marketCapDisplay}
-                            </Table.Cell>
-                            <Table.Cell>
-                                <Link href={company.url} target="_blank">
-                                    {company.url}
-                                </Link>
-                            </Table.Cell>
-                        </Table.Row>
-                    ))}
-                </Table.Body>
-            </Table>
+                                </Table.Cell>
+                                <Table.Cell className="text-center">
+                                    {company.fType}
+                                </Table.Cell>
+                                <Table.Cell className="text-right">
+                                    {company.marketCapDisplay}
+                                </Table.Cell>
+                                <Table.Cell>
+                                    <Link href={company.url} target="_blank">
+                                        {company.url}
+                                    </Link>
+                                </Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
+            </Card>
         </>
     );
 }
 
-function Company(props) {
-    const {
-        keywordDisplay,
-        marketCapDisplay,
-        name,
-        fType,
-        id,
-        url,
-        navigateToDetail,
-    } = props;
-    const { language } = props;
-    const companyName = useMemo(() => {
-        return language ? name[language] : name['en'];
-    }, [name, language]);
+function TableHeaderSortable(props) {
+    const { display, sortDirection, isActive, className, onClickSorting } =
+        props;
 
     return (
-        <div className="company" onClick={() => navigateToDetail(id)}>
-            <div className="company-info">
-                <div className="company-name">
-                    <img src="./logo192.png" className="company-pic" />
-                    <strong>{companyName}</strong>
-                    <div>
-                        <small>Market Cap: {marketCapDisplay}</small>
-                    </div>
-                </div>
-                <div>F Type: {fType}</div>
-                <div>
-                    <strong>Website:</strong>{' '}
-                    <a href={url} target="_blank">
-                        {url}
-                    </a>
-                </div>
-                {keywordDisplay ? <div>keywords: {keywordDisplay}</div> : <></>}
-            </div>
-        </div>
+        <Table.HeadCell
+            className={`flex hover:underline ${className || ''}`}
+            onClick={() => onClickSorting()}
+        >
+            {display}
+            <span
+                className={`table-header-icon ml-auto ${
+                    isActive ? 'active' : ''
+                }`}
+            >
+                {sortDirection === 'asc' ? (
+                    <FiTrendingUp />
+                ) : (
+                    <FiTrendingDown />
+                )}
+            </span>
+        </Table.HeadCell>
     );
 }
 

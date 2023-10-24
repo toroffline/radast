@@ -11,3 +11,17 @@ tr {
     height: 30px;
     margin-right: 1rem;
 }
+
+.company-input-search {
+    width: 300px;
+    display: flex;
+    margin-left: auto;
+}
+
+.table-header-icon {
+    color: rgb(220, 217, 217);
+}
+
+.table-header-icon.active {
+    color: rgb(27, 27, 27);
+}
