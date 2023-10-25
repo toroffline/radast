@@ -1,5 +1,8 @@
+import CommonUtil from '../utils/commonUtil';
+
 class CompanyService {
     #companyList;
+
     constructor(companyList) {
         this.#companyList = this.regenerateCompanyList(companyList);
     }
@@ -12,6 +15,7 @@ class CompanyService {
                   keywordDisplay: company.N_shortname
                       ? company.N_shortname.split(' ').join(', ')
                       : undefined,
+                  marketCap: company.marketcap,
                   marketCapDisplay: company.marketcap
                       ? company.marketcap.toLocaleString()
                       : undefined,
@@ -30,11 +34,46 @@ class CompanyService {
             : [];
     }
 
+    async sort(sortField, sortDirection) {
+        // Mock API
+
+        this.#companyList = this.#companyList.sort((a, b) => {
+            let aValue;
+            let bValue;
+            if (sortField === 'companyName') {
+                aValue = a.aliasName;
+                bValue = b.aliasName;
+                if (sortDirection === 'asc') {
+                    return aValue > bValue ? -1 : aValue === bValue ? 0 : 1;
+                }
+
+                return aValue < bValue ? -1 : aValue === bValue ? 0 : 1;
+            }
+
+            aValue = a.marketCap;
+            bValue = b.marketCap;
+
+            if (bValue == null) return -1;
+            if (aValue == null) return 1;
+
+            return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+        });
+
+        await CommonUtil.sleep(1000);
+
+        return [...this.#companyList];
+    }
+
     async getList() {
+        // Mock API
+        await CommonUtil.sleep(1000);
         return this.#companyList;
     }
 
     async getDetail(companyId) {
+        // Mock API
+        await CommonUtil.sleep(1000);
+
         return this.#companyList.find((company) => company.id === companyId);
     }
 }
