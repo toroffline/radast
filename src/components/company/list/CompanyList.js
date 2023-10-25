@@ -1,10 +1,17 @@
 import { useEffect, useState } from 'react';
 import companyService from '../../../services/companyService';
 import { Link, useNavigate } from 'react-router-dom';
-import { Card, Table, TextInput } from 'flowbite-react';
-import { FiSearch, FiTrendingDown, FiTrendingUp } from 'react-icons/fi';
+import { Button, Card, Table, TextInput } from 'flowbite-react';
+import {
+    FiExternalLink,
+    FiEye,
+    FiSearch,
+    FiTrendingDown,
+    FiTrendingUp,
+} from 'react-icons/fi';
 
 import './CompanyList.css';
+import ButtonIcon from '../../buttonIcon/ButtonIcon';
 const defaultSorting = {
     isActive: false,
     sortDirection: 'desc',
@@ -115,9 +122,21 @@ function CompanyList() {
                                     {company.marketCapDisplay}
                                 </Table.Cell>
                                 <Table.Cell>
-                                    <Link href={company.url} target="_blank">
-                                        {company.url}
-                                    </Link>
+                                    <div className="flex gap-1">
+                                        <ButtonIcon
+                                            icon={<FiEye />}
+                                            onClick={() =>
+                                                navigateToDetail(company.id)
+                                            }
+                                        />
+                                        <ButtonIcon
+                                            icon={<FiExternalLink />}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                window.open(company.url);
+                                            }}
+                                        />
+                                    </div>
                                 </Table.Cell>
                             </Table.Row>
                         ))}
