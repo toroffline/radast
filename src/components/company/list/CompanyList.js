@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
 import companyService from '../../../services/companyService';
 import { useNavigate } from 'react-router-dom';
-import { Card, Spinner, Table, TextInput } from 'flowbite-react';
+import { Card, Table, TextInput } from 'flowbite-react';
 import {
+    FiArrowDown,
+    FiArrowUp,
     FiExternalLink,
     FiEye,
     FiSearch,
-    FiTrendingDown,
-    FiTrendingUp,
 } from 'react-icons/fi';
 
 import './CompanyList.css';
 import ButtonIcon from '../../buttonIcon/ButtonIcon';
+import Loading from '../../loading/Loading';
 const defaultSorting = {
     isActive: false,
     sortDirection: 'desc',
@@ -32,6 +33,7 @@ function CompanyList() {
             sortDirection: 'asc',
         },
     });
+    const [searchKeyword, setSearchKeyword] = useState();
     const [isProcessing, setIsProcessing] = useState(true);
 
     function onClickSorting(field) {
@@ -56,16 +58,16 @@ function CompanyList() {
         setSorting(tempSorting);
     }
 
-    function navigateToDetail(companyId) {
-        navigate(`/company/detail/${companyId}`);
+    async function search(searchKeyword) {
+        setIsProcessing(true);
+        await companyService
+            .search(searchKeyword)
+            .then((data) => setCompanyList(data))
+            .finally(() => setIsProcessing(false));
     }
 
-    function Loading() {
-        return (
-            <div className="loading">
-                <Spinner />
-            </div>
-        );
+    function navigateToDetail(companyId) {
+        navigate(`/company/detail/${companyId}`);
     }
 
     useEffect(() => {
@@ -102,7 +104,15 @@ function CompanyList() {
                     <TextInput
                         className="company-input-search"
                         icon={FiSearch}
-                        placeholder="Company name, Alias name"
+                        placeholder="Search by name or relavant keyword"
+                        onChange={(e) => {
+                            setSearchKeyword(e.target.value);
+                        }}
+                        onKeyUp={(e) => {
+                            if (e.key === 'Enter') {
+                                search(searchKeyword);
+                            }
+                        }}
                     />
                 </div>
                 <div className="content">
@@ -123,7 +133,7 @@ function CompanyList() {
                                     onClickSorting={() =>
                                         onClickSorting('marketCap')
                                     }
-                                    className="text-right"
+                                    className="justify-end"
                                 />
                                 <Table.HeadCell>Actions</Table.HeadCell>
                             </Table.Head>
@@ -158,7 +168,8 @@ function CompanyList() {
                                                 {company.fType}
                                             </Table.Cell>
                                             <Table.Cell className="text-right">
-                                                {company.marketCapDisplay}
+                                                {company.marketCapDisplay ||
+                                                    'NA'}
                                             </Table.Cell>
                                             <Table.Cell>
                                                 <div className="flex gap-1">
@@ -184,7 +195,7 @@ function CompanyList() {
                                                 </div>
                                             </Table.Cell>
                                         </Table.Row>
-                                    ))}{' '}
+                                    ))}
                             </Table.Body>
                         </Table>
                     ) : (
@@ -212,16 +223,8 @@ function TableHeaderSortable(props) {
             onClick={() => onClickSorting()}
         >
             {display}
-            <span
-                className={`table-header-icon ml-auto ${
-                    isActive ? 'active' : ''
-                }`}
-            >
-                {sortDirection === 'asc' ? (
-                    <FiTrendingUp />
-                ) : (
-                    <FiTrendingDown />
-                )}
+            <span className={`table-header-icon ${isActive ? 'active' : ''}`}>
+                {sortDirection === 'asc' ? <FiArrowUp /> : <FiArrowDown />}
             </span>
         </Table.HeadCell>
     );

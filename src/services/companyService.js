@@ -23,7 +23,7 @@ class CompanyService {
                       th: company.N_COMPANY_T,
                       en: company.N_COMPANY_E,
                   },
-                  url: company.N_URL,
+                  url: CommonUtil.addHttpsPrefix(company.N_URL),
                   fType: company.F_TYPE,
                   businessType: {
                       th: company.N_BUSINESS_TYPE_T,
@@ -32,6 +32,19 @@ class CompanyService {
                   fullName: company.N_fullname,
               }))
             : [];
+    }
+
+    async search(searchKeyword) {
+        await CommonUtil.sleep(1000);
+        return this.#companyList.filter(
+            (company) =>
+                company.name.en
+                    .toLowerCase()
+                    .includes(searchKeyword.toLowerCase()) ||
+                company.aliasName
+                    .toLowerCase()
+                    .includes(searchKeyword.toLowerCase())
+        );
     }
 
     async sort(sortField, sortDirection) {

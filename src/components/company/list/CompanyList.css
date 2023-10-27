@@ -13,12 +13,13 @@ tr {
 }
 
 .company-input-search {
-    width: 300px;
+    width: 500px;
     display: flex;
     margin-left: auto;
 }
 
 .table-header-icon {
+    margin-left: 1rem;
     color: rgb(220, 217, 217);
 }
 
@@ -31,15 +32,6 @@ tr {
     min-height: 300px;
 }
 
-.loading {
-    @apply absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100 opacity-40 rounded-lg;
-    z-index: 2;
-}
-
 .no-data {
     @apply flex justify-center items-center w-full h-full;
-}
-
-table {
-    min-height: 300px;
 }

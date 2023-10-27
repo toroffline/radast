@@ -26,6 +26,20 @@ const AppProvider = ({ children }) => {
     const [header, setHeader] = useState();
     const [breadcrumb, setBreadcrumb] = useState();
 
+    function setLatestDisplayBreadcrumb(display) {
+        breadcrumb &&
+            breadcrumb.length > 0 &&
+            setBreadcrumb((prev) => {
+                const temp = [...prev];
+                temp.forEach((b, index) => {
+                    if (index === prev.length - 1) {
+                        b.display = display;
+                    }
+                });
+                return temp;
+            });
+    }
+
     useEffect(() => {
         if (pathname) {
             let activeMenu;
@@ -84,7 +98,14 @@ const AppProvider = ({ children }) => {
     }, [pathname]);
 
     return (
-        <AppContext.Provider value={{ header, breadcrumb }}>
+        <AppContext.Provider
+            value={{
+                header,
+                breadcrumb,
+                setHeader,
+                setLatestDisplayBreadcrumb,
+            }}
+        >
             {children}
         </AppContext.Provider>
     );

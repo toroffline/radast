@@ -2,18 +2,43 @@
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: auto;
-    border: 1px solid #7f7f7f;
+    border: 1px solid #cfcfcf;
+    border-radius: 5px;
 }
 
 .cell {
-    padding: 8px;
+    @apply px-6 py-3 font-normal;
+    border-bottom: 1px solid #cfcfcf;
+}
+
+.cell:last-child {
+    border-bottom: 0;
 }
 
 .cell-header {
-    font-weight: 500;
+    @apply group-first/head:first:rounded-tl-lg
+        group-first/head:last:rounded-tr-lg
+        bg-gray-50
+        dark:bg-gray-700
+        px-6
+        py-3
+        flex
+        font-medium;
+    border-right: 1px solid #cfcfcf;
+}
+
+.cell-header:first-child {
+    border-radius: 5px 0 0 0;
+}
+
+.cell-header.last-cell-header {
+    border-radius: 0 0 0 5px;
+    border-bottom: 0;
 }
 
 .company-detail {
+    @apply relative;
+    min-height: 50vh;
     background-color: #fff;
     border-radius: 5px;
     padding: 20px;
@@ -21,4 +46,15 @@
 
 .company-detail header {
     margin-bottom: 1rem;
+}
+
+.company-logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 1rem;
+}
+
+.icon-external {
+    margin-left: 10px;
+    margin-top: 3px;
 }
