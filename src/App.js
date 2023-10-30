@@ -20,6 +20,8 @@ function Router() {
         import('./components/company/detail/CompanyDetail')
     );
 
+    const UserRegister = lazy(() => import('./components/register/Register'));
+
     function WildCardRedirect() {
         return <Navigate to="/company/list" />;
     }
@@ -36,7 +38,7 @@ function Router() {
                         />
                         <Route path="*" element={<WildCardRedirect />} />
                     </Route>
-                    <Route path="/user" element={<>dummy</>} />
+                    <Route path="/user/register" element={<UserRegister />} />
                 </Routes>
             </Suspense>
         </BrowserRouter>
