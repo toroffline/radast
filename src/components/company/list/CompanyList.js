@@ -13,6 +13,7 @@ import {
 import './CompanyList.css';
 import ButtonIcon from '../../buttonIcon/ButtonIcon';
 import Loading from '../../loading/Loading';
+import RangeInput from '../../rangeInput/RangeInput';
 const defaultSorting = {
     isActive: false,
     sortDirection: 'desc',
@@ -100,7 +101,7 @@ function CompanyList() {
     return (
         <>
             <Card>
-                <div>
+                <div className="flex flex-row">
                     <TextInput
                         className="company-input-search"
                         icon={FiSearch}
@@ -114,6 +115,7 @@ function CompanyList() {
                             }
                         }}
                     />
+                    <RangeInput />
                 </div>
                 <div className="content">
                     {companyList && companyList.length > 0 ? (
