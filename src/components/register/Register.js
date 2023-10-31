@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import * as yup from 'yup';
+import CommonUtil from '../../utils/commonUtil';
 
 const defaultUserInfo = {
     firstName: '',
@@ -47,22 +48,42 @@ function Register() {
         initialValues: defaultUserInfo,
         validationSchema: schema,
         validateOnMount: false,
-        validateOnBlur: false,
-        validateOnChange: false,
+        validateOnBlur: true,
+        validateOnChange: true,
     });
-    const { values, errors, validateForm, setFieldValue } = form;
+    const {
+        errors,
+        isSubmitting,
+        setValues,
+        setSubmitting,
+        validateForm,
+        setFieldValue,
+    } = form;
     const queryParams = new URLSearchParams(location.search);
 
     async function validate() {
         console.groupCollapsed('submit form');
+        setSubmitting(true);
         await validateForm().then((errors) => {
-            if (errors) {
+            if (errors && !CommonUtil.isObjectEmpty(errors)) {
                 console.log({ errors });
             } else {
                 console.log('form valid');
             }
         });
         console.groupEnd('submit form');
+    }
+
+    function getFieldStyle(fieldName) {
+        return isSubmitting && errors && errors[fieldName] ? 'failure' : '';
+    }
+
+    function getError(field) {
+        return isSubmitting && errors && errors[field] ? (
+            <>{errors[field]}</>
+        ) : (
+            <></>
+        );
     }
 
     useEffect(() => {
@@ -72,7 +93,7 @@ function Register() {
         const email = queryParams.get('email') ?? '';
         const ref = queryParams.get('ref') ?? '';
 
-        setFieldValue({
+        setValues({
             firstName,
             lastName,
             phone,
@@ -90,39 +111,37 @@ function Register() {
         >
             <TextInput
                 placeholder="First name"
-                defaultValue={form.values.firstName}
+                value={form.values.firstName ?? ''}
                 onChange={(e) => {
-                    setFieldValue('firstName', e.target.value ?? '');
+                    setFieldValue('firstName', e.target.value);
                 }}
-                color={errors && errors['firstName'] ? 'failure' : ''}
+                color={getFieldStyle('firstName')}
             />
-            {errors && errors['firstName']}
+            {getError('firstName')}
             <TextInput
                 placeholder="Last name"
-                defaultValue={form.values.lastName}
-                value={form.values.lastName}
+                value={form.values.lastName ?? ''}
                 onChange={(e) => setFieldValue('lastName', e.target.value)}
-                color={errors && errors['lastName'] ? 'failure' : ''}
+                color={getFieldStyle('lastName')}
             />
+            {getError('lastName')}
             <TextInput
                 placeholder="Phone number"
-                defaultValue={form.values.phone}
-                value={form.values.phone}
+                value={form.values.phone ?? ''}
                 onChange={(e) => setFieldValue('phone', e.target.value)}
-                color={errors && errors['phone'] ? 'failure' : ''}
+                color={getFieldStyle('phone')}
             />
+            {getError('phone')}
             <TextInput
-                type="email"
                 placeholder="Email"
-                defaultValue={form.values.email}
-                value={form.values.email}
+                value={form.values.email ?? ''}
                 onChange={(e) => setFieldValue('email', e.target.value)}
-                color={errors && errors['email'] ? 'failure' : ''}
+                color={getFieldStyle('email')}
             />
+            {getError('email')}
             <TextInput
                 placeholder="Ref."
-                defaultValue={form.values.ref}
-                value={form.values.ref}
+                value={form.values.ref ?? ''}
                 onChange={(e) => setFieldValue('ref', e.target.value)}
             />
             <Button type="submit">Submit</Button>
