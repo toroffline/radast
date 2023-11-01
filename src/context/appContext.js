@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { matchPath, useLocation } from 'react-router-dom';
+import { matchPath, useLocation, useNavigate } from 'react-router-dom';
 
 const AppContext = createContext();
 
@@ -23,8 +23,10 @@ const menus = [
 
 const AppProvider = ({ children }) => {
     const { pathname } = useLocation();
+    const navigate = useNavigate();
     const [header, setHeader] = useState();
     const [breadcrumb, setBreadcrumb] = useState();
+    const [oneTimeRegister, setOneTimeRegister] = useState(false);
 
     function setLatestDisplayBreadcrumb(display) {
         breadcrumb &&
@@ -39,6 +41,12 @@ const AppProvider = ({ children }) => {
                 return temp;
             });
     }
+
+    useEffect(() => {
+        if (oneTimeRegister) {
+            navigate('/user/register-thankyou');
+        }
+    }, [oneTimeRegister]);
 
     useEffect(() => {
         if (pathname) {
@@ -102,6 +110,8 @@ const AppProvider = ({ children }) => {
             value={{
                 header,
                 breadcrumb,
+                oneTimeRegister,
+                setOneTimeRegister,
                 setHeader,
                 setLatestDisplayBreadcrumb,
             }}

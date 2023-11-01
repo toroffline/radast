@@ -1,0 +1,36 @@
+.text-wave {
+    font-size: 20px;
+    font-weight: 500;
+    position: relative;
+}
+
+.text-wave span {
+    position: relative;
+    display: inline-block;
+    animation: waveAnimate 2s ease-in-out infinite;
+    animation-delay: calc(0.1s * var(--i));
+}
+
+@keyframes waveAnimate {
+    0% {
+        transform: translateY(0px);
+    }
+
+    20% {
+        transform: translateY(-5px);
+    }
+
+    40%,
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.register-form {
+    @apply w-full px-4 py-2 mb-12 md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12 sm:pt-0;
+}
+
+.infographic {
+    padding: 2rem;
+    @apply text-center grow-0 basis-auto md:mb-0 md:w-9/12 md:shrink-0 lg:w-6/12 xl:w-6/12;
+}
