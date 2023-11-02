@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/radast/static/css/main.89c8d7ee.css",
-    "main.js": "/radast/static/js/main.cbd0a370.js",
+    "main.js": "/radast/static/js/main.d8cd59ea.js",
     "static/css/438.be3d9d2b.chunk.css": "/radast/static/css/438.be3d9d2b.chunk.css",
     "static/js/438.3213cf4c.chunk.js": "/radast/static/js/438.3213cf4c.chunk.js",
     "static/css/920.689479e8.chunk.css": "/radast/static/css/920.689479e8.chunk.css",
@@ -14,7 +14,7 @@
     "static/js/174.3e007974.chunk.js": "/radast/static/js/174.3e007974.chunk.js",
     "index.html": "/radast/index.html",
     "main.89c8d7ee.css.map": "/radast/static/css/main.89c8d7ee.css.map",
-    "main.cbd0a370.js.map": "/radast/static/js/main.cbd0a370.js.map",
+    "main.d8cd59ea.js.map": "/radast/static/js/main.d8cd59ea.js.map",
     "438.be3d9d2b.chunk.css.map": "/radast/static/css/438.be3d9d2b.chunk.css.map",
     "438.3213cf4c.chunk.js.map": "/radast/static/js/438.3213cf4c.chunk.js.map",
     "920.689479e8.chunk.css.map": "/radast/static/css/920.689479e8.chunk.css.map",
@@ -28,6 +28,6 @@
   },
   "entrypoints": [
     "static/css/main.89c8d7ee.css",
-    "static/js/main.cbd0a370.js"
+    "static/js/main.d8cd59ea.js"
   ]
 }
