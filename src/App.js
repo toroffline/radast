@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import Layout from './layout/Layout';
 import './App.css';
@@ -29,7 +29,7 @@ function Router() {
     }
 
     return (
-        <BrowserRouter>
+        <HashRouter basename="/radast">
             <AppProvider>
                 <Suspense fallback={<Loading />}>
                     <Routes>
@@ -56,7 +56,7 @@ function Router() {
                     </Routes>
                 </Suspense>
             </AppProvider>
-        </BrowserRouter>
+        </HashRouter>
     );
 }
 

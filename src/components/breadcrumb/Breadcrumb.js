@@ -1,4 +1,5 @@
 import { Breadcrumb as BreadcrumbFlow } from 'flowbite-react';
+import { Link } from 'react-router-dom';
 
 function Breadcrumb(props) {
     const { values } = props;
@@ -7,10 +8,9 @@ function Breadcrumb(props) {
         <BreadcrumbFlow>
             {values.map((breadcrumb, index) => (
                 <BreadcrumbFlow.Item
-                    href={breadcrumb.redirect}
                     key={`breadcrub-${breadcrumb.display.toLowerCase()}-index`}
                 >
-                    <p>{breadcrumb.display}</p>
+                    <Link to={breadcrumb.redirect}>{breadcrumb.display}</Link>
                 </BreadcrumbFlow.Item>
             ))}
         </BreadcrumbFlow>
