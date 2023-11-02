@@ -1,7 +1,7 @@
 {
     "name": "radast",
     "version": "0.1.0",
-    "homepage": "https://toroffline.github.com/radast",
+    "homepage": "https://toroffline.github.com/radast/#",
     "private": true,
     "dependencies": {
         "flowbite": "^1.8.1",
