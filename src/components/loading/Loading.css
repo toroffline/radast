@@ -1,4 +1,0 @@
-.loading {
-    @apply absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100 opacity-40 rounded-lg;
-    z-index: 2;
-}
