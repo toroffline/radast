@@ -115,7 +115,6 @@ function DropdownFilter(props) {
                             );
                             onApply(_filters);
                         }}
-                        className="hover:underline cursor-pointer text-cyan-800"
                     >
                         Clear
                     </a>

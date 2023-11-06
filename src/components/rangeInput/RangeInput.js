@@ -57,7 +57,6 @@ function RangeInput(props) {
                                 setTo(0);
                                 onApply(0, 0);
                             }}
-                            className="hover:underline cursor-pointer text-cyan-800"
                         >
                             Clear
                         </a>

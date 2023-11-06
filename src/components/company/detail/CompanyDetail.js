@@ -26,7 +26,7 @@ function CompanyDetail() {
         }
 
         const companyId = +params['companyId'];
-        if (CommonUtil.isFalsyExceptZero(companyId)) {
+        if (CommonUtil.isNotFalsyExceptZero(companyId)) {
             setCompanyId(companyId);
             getCompanyDetail(companyId);
         }

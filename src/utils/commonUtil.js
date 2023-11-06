@@ -1,4 +1,11 @@
 const CommonUtil = {
+    isNotFalsyExceptZero: function (value) {
+        if (value === 0) {
+            return true;
+        } else {
+            return !value;
+        }
+    },
     isFalsyIncludeZero: function (value) {
         if (value === 0) {
             return true;

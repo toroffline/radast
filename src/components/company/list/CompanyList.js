@@ -230,14 +230,12 @@ function CompanyList() {
                                             <Table.Cell>
                                                 <div className="flex gap-1">
                                                     <Link
-                                                        className="hover:underline"
                                                         to={`/company/detail/${company.id}`}
                                                     >
                                                         See info
                                                     </Link>
                                                     {' | '}
                                                     <Link
-                                                        className="hover:underline"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             window.open(

@@ -27,3 +27,7 @@ h2 {
     @apply font-medium;
     font-size: 18px;
 }
+
+a {
+    @apply hover:underline cursor-pointer text-cyan-800;
+}
