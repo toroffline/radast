@@ -14,38 +14,62 @@ import './CompanyList.css';
 import ButtonIcon from '../../buttonIcon/ButtonIcon';
 import Loading from '../../loading/Loading';
 import RangeInput from '../../rangeInput/RangeInput';
+import DropdownFilter from '../../dropdownFilter/DropdownFilter';
+
 const defaultSorting = {
     isActive: false,
-    sortDirection: 'desc',
+    direction: 'desc',
 };
 
 function CompanyList() {
     const navigate = useNavigate();
     const [companyList, setCompanyList] = useState([]);
-    const [sorting, setSorting] = useState({
-        companyName: {
-            display: 'Company Name',
-            isActive: true,
-            sortDirection: 'asc',
+    const [filter, setFilter] = useState({
+        sort: {
+            companyName: {
+                display: 'Company Name',
+                isActive: true,
+                direction: 'desc',
+            },
+            marketCap: {
+                display: 'Market Cap',
+                isActive: false,
+                direction: 'asc',
+            },
         },
         marketCap: {
-            display: 'Market Cap',
-            isActive: false,
-            sortDirection: 'asc',
+            from: null,
+            to: null,
         },
+        search: '',
+        fType: [
+            {
+                display: 'All',
+                value: 'all',
+                isActive: false,
+            },
+            {
+                display: 'Type S',
+                value: 'S',
+                isActive: true,
+            },
+            {
+                display: 'Type A',
+                value: 'A',
+                isActive: false,
+            },
+        ],
     });
-    const [searchKeyword, setSearchKeyword] = useState();
+    const [searchKeyword, setSearchKeyword] = useState('');
     const [isProcessing, setIsProcessing] = useState(true);
 
     function onClickSorting(field) {
-        const tempSorting = { ...sorting };
+        const tempSorting = { ...filter.sort };
         Object.keys(tempSorting).forEach((sortField) => {
             if (sortField === field) {
                 if (tempSorting[field].isActive) {
-                    tempSorting[field].sortDirection =
-                        tempSorting[field].sortDirection === 'asc'
-                            ? 'desc'
-                            : 'asc';
+                    tempSorting[field].direction =
+                        tempSorting[field].direction === 'asc' ? 'desc' : 'asc';
                 } else {
                     tempSorting[field].isActive = true;
                 }
@@ -56,13 +80,22 @@ function CompanyList() {
                 };
             }
         });
-        setSorting(tempSorting);
+        console.log({ tempSorting });
+        setFilter((prev) => ({ ...prev, sort: tempSorting }));
     }
 
-    async function search(searchKeyword) {
+    async function search() {
         setIsProcessing(true);
         await companyService
-            .search(searchKeyword)
+            .search(filter)
+            .then((data) => setCompanyList(data))
+            .finally(() => setIsProcessing(false));
+    }
+
+    async function handleOnApplyMarketCapRange() {
+        setIsProcessing(true);
+        await companyService
+            .search(filter)
             .then((data) => setCompanyList(data))
             .finally(() => setIsProcessing(false));
     }
@@ -85,44 +118,87 @@ function CompanyList() {
     }, []);
 
     useEffect(() => {
-        const sortField = Object.keys(sorting).find(
-            (key) => sorting[key].isActive
-        );
         setIsProcessing(true);
         async function fetch() {
+            let _sort = { field: undefined, direction: undefined };
+            for (let s of Object.keys(filter.sort)) {
+                if (filter.sort[s].isActive) {
+                    _sort.field = s;
+                    _sort.direction = filter.sort[s].direction;
+                    break;
+                }
+            }
+
+            let _fType = [];
+            let isSelectAllFType = false;
+            for (let f of filter.fType) {
+                if (f.value === 'all') {
+                    isSelectAllFType = f.isActive;
+                }
+                if (f.isActive || isSelectAllFType) {
+                    _fType.push(f.value);
+                }
+            }
+            const _filter = {
+                ...filter,
+                sort: _sort,
+                fType: _fType,
+            };
+
             await companyService
-                .sort(sortField, sorting[sortField].sortDirection)
+                .search(_filter)
                 .then((data) => setCompanyList(data))
                 .finally(() => setIsProcessing(false));
         }
         fetch();
-    }, [sorting]);
+    }, [filter]);
 
     return (
         <>
             <Card>
-                <div className="flex flex-row">
+                <div className="flex flex-row gap-4">
                     <TextInput
                         className="company-input-search"
                         icon={FiSearch}
                         placeholder="Search by name or relavant keyword"
+                        value={searchKeyword ?? ''}
                         onChange={(e) => {
                             setSearchKeyword(e.target.value);
                         }}
                         onKeyUp={(e) => {
                             if (e.key === 'Enter') {
-                                search(searchKeyword);
+                                setFilter((prev) => ({
+                                    ...prev,
+                                    search: searchKeyword,
+                                }));
                             }
                         }}
                     />
-                    <RangeInput />
+                    <DropdownFilter
+                        filters={filter.fType}
+                        onApply={(values) => {
+                            console.log({ values });
+                            setFilter((prev) => ({ ...prev, fType: values }));
+                        }}
+                    />
+                    <RangeInput
+                        from={filter.from}
+                        to={filter.to}
+                        setFrom={(value) => {
+                            setFilter((prev) => ({ ...prev, from: value }));
+                        }}
+                        setTo={(value) => {
+                            setFilter((prev) => ({ ...prev, to: value }));
+                        }}
+                        onApply={() => handleOnApplyMarketCapRange()}
+                    />
                 </div>
                 <div className="content">
                     {companyList && companyList.length > 0 ? (
                         <Table hoverable>
                             <Table.Head>
                                 <TableHeaderSortable
-                                    {...sorting.companyName}
+                                    {...filter.sort.companyName}
                                     onClickSorting={() =>
                                         onClickSorting('companyName')
                                     }
@@ -131,7 +207,7 @@ function CompanyList() {
                                     F Type
                                 </Table.HeadCell>
                                 <TableHeaderSortable
-                                    {...sorting.marketCap}
+                                    {...filter.sort.marketCap}
                                     onClickSorting={() =>
                                         onClickSorting('marketCap')
                                     }
@@ -216,8 +292,7 @@ function CompanyList() {
 }
 
 function TableHeaderSortable(props) {
-    const { display, sortDirection, isActive, className, onClickSorting } =
-        props;
+    const { display, direction, isActive, className, onClickSorting } = props;
 
     return (
         <Table.HeadCell
@@ -226,7 +301,7 @@ function TableHeaderSortable(props) {
         >
             {display}
             <span className={`table-header-icon ${isActive ? 'active' : ''}`}>
-                {sortDirection === 'asc' ? <FiArrowUp /> : <FiArrowDown />}
+                {direction === 'asc' ? <FiArrowUp /> : <FiArrowDown />}
             </span>
         </Table.HeadCell>
     );

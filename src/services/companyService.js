@@ -34,29 +34,36 @@ class CompanyService {
             : [];
     }
 
-    async search(searchKeyword) {
+    async search(filter) {
         await CommonUtil.sleep(1000);
-        return this.#companyList.filter(
-            (company) =>
-                company.name.en
-                    .toLowerCase()
-                    .includes(searchKeyword.toLowerCase()) ||
-                company.aliasName
-                    .toLowerCase()
-                    .includes(searchKeyword.toLowerCase())
-        );
-    }
+        let filtered = [...this.#companyList];
+        console.log({ filter });
 
-    async sort(sortField, sortDirection) {
-        // Mock API
+        if (filter.search) {
+            filtered = this.#companyList.filter(
+                (company) =>
+                    company.name.en
+                        .toLowerCase()
+                        .includes(filter.search.toLowerCase()) ||
+                    company.aliasName
+                        .toLowerCase()
+                        .includes(filter.search.toLowerCase())
+            );
+        }
 
-        this.#companyList = this.#companyList.sort((a, b) => {
+        if (filter.fType && filter.fType.length > 0) {
+            filtered = filtered.filter((company2) =>
+                filter.fType.includes(company2.fType)
+            );
+        }
+
+        return filtered.sort((a, b) => {
             let aValue;
             let bValue;
-            if (sortField === 'companyName') {
+            if (filter.sort.field === 'companyName') {
                 aValue = a.aliasName;
                 bValue = b.aliasName;
-                if (sortDirection === 'asc') {
+                if (filter.sort.direction === 'asc') {
                     return aValue > bValue ? -1 : aValue === bValue ? 0 : 1;
                 }
 
@@ -69,12 +76,10 @@ class CompanyService {
             if (bValue == null) return -1;
             if (aValue == null) return 1;
 
-            return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+            return filter.sort.direction === 'asc'
+                ? aValue - bValue
+                : bValue - aValue;
         });
-
-        await CommonUtil.sleep(1000);
-
-        return [...this.#companyList];
     }
 
     async getList() {
@@ -155,7 +160,7 @@ const mockCompanyList = [
         N_COMPANY_T: 'บริษัท โซลาร์ตรอน จำกัด (มหาชน)',
         N_COMPANY_E: 'SOLARTRON PUBLIC COMPANY LIMITED',
         N_URL: 'http://www.solartron.co.th',
-        F_TYPE: 'S',
+        F_TYPE: 'A',
         N_BUSINESS_TYPE_E:
             'The company provides a wide range of solar modules and a balance of systems for solar electricity application. It also provides nationwide installation services including export.',
         N_BUSINESS_TYPE_T:
