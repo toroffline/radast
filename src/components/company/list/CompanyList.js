@@ -1,17 +1,10 @@
 import { useEffect, useState } from 'react';
 import companyService from '../../../services/companyService';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, Table, TextInput } from 'flowbite-react';
-import {
-    FiArrowDown,
-    FiArrowUp,
-    FiExternalLink,
-    FiEye,
-    FiSearch,
-} from 'react-icons/fi';
+import { FiArrowDown, FiArrowUp, FiSearch } from 'react-icons/fi';
 
 import './CompanyList.css';
-import ButtonIcon from '../../buttonIcon/ButtonIcon';
 import Loading from '../../loading/Loading';
 import RangeInput from '../../rangeInput/RangeInput';
 import DropdownFilter from '../../dropdownFilter/DropdownFilter';
@@ -237,25 +230,24 @@ function CompanyList() {
                                             </Table.Cell>
                                             <Table.Cell>
                                                 <div className="flex gap-1">
-                                                    <ButtonIcon
-                                                        icon={<FiEye />}
-                                                        onClick={() =>
-                                                            navigateToDetail(
-                                                                company.id
-                                                            )
-                                                        }
-                                                    />
-                                                    <ButtonIcon
-                                                        icon={
-                                                            <FiExternalLink />
-                                                        }
+                                                    <Link
+                                                        className="hover:underline"
+                                                        to={`/company/detail/${company.id}`}
+                                                    >
+                                                        See info
+                                                    </Link>
+                                                    {' | '}
+                                                    <Link
+                                                        className="hover:underline"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             window.open(
                                                                 company.url
                                                             );
                                                         }}
-                                                    />
+                                                    >
+                                                        Visit site
+                                                    </Link>
                                                 </div>
                                             </Table.Cell>
                                         </Table.Row>
