@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Button, Dropdown, TextInput } from 'flowbite-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './RangeInput.css';
+import CommonUtil from '../../utils/commonUtil';
 
 function RangeInput(props) {
     const { from, to, onApply } = props;
@@ -12,16 +13,25 @@ function RangeInput(props) {
         if (/^[0-9]*$/.test(value)) {
             setFn((prev) => (prev ?? '') + value);
         } else if (value === 'Backspace') {
-            setFn((prev) => prev.slice(0, -1));
+            setFn((prev) => prev.toString().slice(0, -1));
         }
     }
+
+    const dropdownDisplay = useMemo(() => {
+        return CommonUtil.isFalsyIncludeZero(from) &&
+            CommonUtil.isFalsyIncludeZero(to)
+            ? 'Market Cap'
+            : `${from && from >= 0 ? from.toLocaleString() : 'from'} - ${
+                  to && to >= 0 ? to.toLocaleString() : 'to'
+              }`;
+    }, [from, to]);
 
     useEffect(() => setFrom(from || ''), [from]);
     useEffect(() => setTo(to || ''), [to]);
 
     return (
         <>
-            <Dropdown dismissOnClick={true} label="Market Cap">
+            <Dropdown dismissOnClick={true} label={dropdownDisplay}>
                 <div id={`range-input-menu`} className="p-3">
                     <div className="flex items-center">
                         <TextInput
@@ -43,6 +53,8 @@ function RangeInput(props) {
                             href=""
                             onClick={(e) => {
                                 e.preventDefault();
+                                setFrom(0);
+                                setTo(0);
                                 onApply(0, 0);
                             }}
                             className="hover:underline cursor-pointer text-cyan-800"
@@ -51,7 +63,7 @@ function RangeInput(props) {
                         </a>
                         <Button
                             onClick={() => {
-                                onApply(_from, _to);
+                                onApply(+_from, +_to);
                             }}
                             className="apply"
                         >

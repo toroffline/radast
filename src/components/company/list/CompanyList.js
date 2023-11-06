@@ -161,7 +161,6 @@ function CompanyList() {
                         from={filter.marketCap.from}
                         to={filter.marketCap.to}
                         onApply={(from, to) => {
-                            console.log({ from, to });
                             setFilter((prev) => ({
                                 ...prev,
                                 marketCap: {

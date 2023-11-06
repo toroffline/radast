@@ -57,12 +57,14 @@ class CompanyService {
         }
 
         if (filter.marketCap.from || filter.marketCap.to) {
-            const marketCapFrom = filter.marketCap.from ?? 0;
-            const marketCapTo = filter.marketCap.to ?? 0;
             filtered = filtered.filter(
                 (company) =>
-                    company.marketCap >= marketCapFrom &&
-                    company.marketCap <= marketCapTo
+                    (filter.marketCap.from
+                        ? company.marketCap >= filter.marketCap.from
+                        : true) &&
+                    (filter.marketCap.to
+                        ? company.marketCap <= filter.marketCap.to
+                        : true)
             );
         }
 

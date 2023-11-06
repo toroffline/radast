@@ -1,9 +1,9 @@
 const CommonUtil = {
-    isFalsyExceptZero: function (value) {
+    isFalsyIncludeZero: function (value) {
         if (value === 0) {
             return true;
         } else {
-            return !!value;
+            return !value;
         }
     },
     sleep: async function sleep(ms) {
