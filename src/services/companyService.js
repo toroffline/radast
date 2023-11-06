@@ -51,8 +51,18 @@ class CompanyService {
         }
 
         if (filter.fType && filter.fType.length > 0) {
-            filtered = filtered.filter((company2) =>
-                filter.fType.includes(company2.fType)
+            filtered = filtered.filter((company) =>
+                filter.fType.includes(company.fType)
+            );
+        }
+
+        if (filter.marketCap.from || filter.marketCap.to) {
+            const marketCapFrom = filter.marketCap.from ?? 0;
+            const marketCapTo = filter.marketCap.to ?? 0;
+            filtered = filtered.filter(
+                (company) =>
+                    company.marketCap >= marketCapFrom &&
+                    company.marketCap <= marketCapTo
             );
         }
 

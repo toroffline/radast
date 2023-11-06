@@ -1,11 +1,23 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Button, Dropdown, TextInput } from 'flowbite-react';
-import { useRef } from 'react';
+import { useEffect, useState } from 'react';
 import './RangeInput.css';
 
 function RangeInput(props) {
-    const { from, to, setFrom, setTo, onApply } = props;
-    const fromInputRef = useRef();
-    const toInputRef = useRef();
+    const { from, to, onApply } = props;
+    const [_from, setFrom] = useState();
+    const [_to, setTo] = useState();
+
+    function handleInput(value, setFn) {
+        if (/^[0-9]*$/.test(value)) {
+            setFn((prev) => (prev ?? '') + value);
+        } else if (value === 'Backspace') {
+            setFn((prev) => prev.slice(0, -1));
+        }
+    }
+
+    useEffect(() => setFrom(from || ''), [from]);
+    useEffect(() => setTo(to || ''), [to]);
 
     return (
         <>
@@ -14,33 +26,15 @@ function RangeInput(props) {
                     <div className="flex items-center">
                         <TextInput
                             placeholder="From"
-                            ref={fromInputRef}
-                            defaultValue={from ?? ''}
-                            onKeyUp={(e) => {
-                                if (/^[0-9]*$/.test(e.key)) {
-                                    setFrom((prev) => (prev ?? '') + e.key);
-                                } else if (e.key === 'Backspace') {
-                                    setFrom((prev) => prev.slice(0, -1));
-                                } else if (e.key === 'Enter') {
-                                    toInputRef.current &&
-                                        toInputRef.current.focus();
-                                }
-                            }}
+                            defaultValue={_from || ''}
+                            onKeyUp={(e) => handleInput(e.key, setFrom)}
                             className="range"
                         />
                         <span className="mx-1"> — </span>
                         <TextInput
                             placeholder="To"
-                            ref={toInputRef}
-                            defaultValue={to ?? ''}
-                            onKeyUp={(e) => {
-                                if (/^[0-9]*$/.test(e.key)) {
-                                    setTo((prev) => prev + e.key);
-                                } else if (e.key === 'Backspace') {
-                                    setTo((prev) => prev.slice(0, -1));
-                                } else if (e.key === 'Enter') {
-                                }
-                            }}
+                            defaultValue={_to || ''}
+                            onKeyUp={(e) => handleInput(e.key, setTo)}
                             className="range"
                         />
                     </div>
@@ -49,12 +43,18 @@ function RangeInput(props) {
                             href=""
                             onClick={(e) => {
                                 e.preventDefault();
+                                onApply(0, 0);
                             }}
                             className="hover:underline cursor-pointer text-cyan-800"
                         >
                             Clear
                         </a>
-                        <Button onClick={() => onApply()} className="apply">
+                        <Button
+                            onClick={() => {
+                                onApply(_from, _to);
+                            }}
+                            className="apply"
+                        >
                             Apply
                         </Button>
                     </div>

@@ -84,22 +84,6 @@ function CompanyList() {
         setFilter((prev) => ({ ...prev, sort: tempSorting }));
     }
 
-    async function search() {
-        setIsProcessing(true);
-        await companyService
-            .search(filter)
-            .then((data) => setCompanyList(data))
-            .finally(() => setIsProcessing(false));
-    }
-
-    async function handleOnApplyMarketCapRange() {
-        setIsProcessing(true);
-        await companyService
-            .search(filter)
-            .then((data) => setCompanyList(data))
-            .finally(() => setIsProcessing(false));
-    }
-
     function navigateToDetail(companyId) {
         navigate(`/company/detail/${companyId}`);
     }
@@ -181,15 +165,18 @@ function CompanyList() {
                         }}
                     />
                     <RangeInput
-                        from={filter.from}
-                        to={filter.to}
-                        setFrom={(value) => {
-                            setFilter((prev) => ({ ...prev, from: value }));
+                        from={filter.marketCap.from}
+                        to={filter.marketCap.to}
+                        onApply={(from, to) => {
+                            console.log({ from, to });
+                            setFilter((prev) => ({
+                                ...prev,
+                                marketCap: {
+                                    from,
+                                    to,
+                                },
+                            }));
                         }}
-                        setTo={(value) => {
-                            setFilter((prev) => ({ ...prev, to: value }));
-                        }}
-                        onApply={() => handleOnApplyMarketCapRange()}
                     />
                 </div>
                 <div className="content">
