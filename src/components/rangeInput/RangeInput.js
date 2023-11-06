@@ -17,7 +17,6 @@ function RangeInput(props) {
                             ref={fromInputRef}
                             defaultValue={from ?? ''}
                             onKeyUp={(e) => {
-                                console.log(e.key);
                                 if (/^[0-9]*$/.test(e.key)) {
                                     setFrom((prev) => (prev ?? '') + e.key);
                                 } else if (e.key === 'Backspace') {

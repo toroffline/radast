@@ -52,6 +52,7 @@ function CompanyList() {
                 display: 'Type S',
                 value: 'S',
                 isActive: true,
+                isDefault: true,
             },
             {
                 display: 'Type A',
@@ -80,7 +81,6 @@ function CompanyList() {
                 };
             }
         });
-        console.log({ tempSorting });
         setFilter((prev) => ({ ...prev, sort: tempSorting }));
     }
 
@@ -177,7 +177,6 @@ function CompanyList() {
                     <DropdownFilter
                         filters={filter.fType}
                         onApply={(values) => {
-                            console.log({ values });
                             setFilter((prev) => ({ ...prev, fType: values }));
                         }}
                     />

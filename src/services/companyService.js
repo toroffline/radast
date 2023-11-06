@@ -37,7 +37,6 @@ class CompanyService {
     async search(filter) {
         await CommonUtil.sleep(1000);
         let filtered = [...this.#companyList];
-        console.log({ filter });
 
         if (filter.search) {
             filtered = this.#companyList.filter(
