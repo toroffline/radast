@@ -107,13 +107,12 @@ function DropdownFilter(props) {
                         href=""
                         onClick={(e) => {
                             e.preventDefault();
-                            setFilters((prev) =>
-                                prev.map((p) => ({
-                                    ...p,
-                                    isActive: p.value === 'all',
-                                }))
-                            );
-                            onApply(_filters);
+                            const newValue = _filters.map((f) => ({
+                                ...f,
+                                isActive: f.value === 'all',
+                            }));
+                            setFilters(newValue);
+                            onApply(newValue);
                         }}
                     >
                         Clear
