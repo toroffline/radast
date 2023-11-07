@@ -1,0 +1,12 @@
+.header {
+    @apply flex flex-col;
+}
+
+@media (max-width: 767px) {
+    .header {
+        @apply flex-row;
+    }
+    .header button.back {
+        @apply mr-4;
+    }
+}
