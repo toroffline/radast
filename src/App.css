@@ -24,18 +24,9 @@ button.drawer-sidebar {
     padding: 1rem;
 }
 
-h1 {
-    @apply font-semibold;
-    margin: 20px 0px 15px 0px;
-    font-size: 1.3rem;
-}
-
-h2 {
-    @apply font-medium;
-    margin: 2px 0px 15px 0px;
-    font-size: 1.1rem;
-}
-
-a {
-    @apply hover:underline cursor-pointer text-cyan-800;
+@media (max-width: 767px) {
+    .main {
+        @apply w-full;
+        padding: 1rem;
+    }
 }

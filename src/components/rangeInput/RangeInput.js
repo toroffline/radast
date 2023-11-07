@@ -1,8 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Button, Dropdown, TextInput } from 'flowbite-react';
 import { useEffect, useMemo, useState } from 'react';
-import './RangeInput.css';
+import { Button, Dropdown, TextInput } from 'flowbite-react';
+
 import CommonUtil from '../../utils/commonUtil';
+
+import './RangeInput.css';
 
 function RangeInput(props) {
     const { from, to, onApply } = props;

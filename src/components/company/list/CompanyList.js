@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
-import companyService from '../../../services/companyService';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, Table, TextInput } from 'flowbite-react';
 import { FiArrowDown, FiArrowUp, FiSearch } from 'react-icons/fi';
 
-import './CompanyList.css';
+import { useAppContext } from '../../../context/appContext';
+import companyService from '../../../services/companyService';
+
 import Loading from '../../loading/Loading';
 import RangeInput from '../../rangeInput/RangeInput';
 import DropdownFilter from '../../dropdownFilter/DropdownFilter';
+
+import './CompanyList.css';
 
 const defaultSorting = {
     isActive: false,
@@ -16,6 +19,7 @@ const defaultSorting = {
 
 function CompanyList() {
     const navigate = useNavigate();
+    const { isMobile, setDisplayBackBtn } = useAppContext();
     const [companyList, setCompanyList] = useState([]);
     const [filter, setFilter] = useState({
         sort: {
@@ -82,6 +86,7 @@ function CompanyList() {
     }
 
     useEffect(() => {
+        setDisplayBackBtn(false);
         setIsProcessing(true);
 
         async function fetch() {
@@ -132,13 +137,12 @@ function CompanyList() {
 
     return (
         <>
-            <Card>
-                <div className="flex flex-row gap-4">
+            <Card className="overflow-scroll sm:overflow-auto">
+                <div className="main-filter">
                     <TextInput
-                        className="company-input-search"
                         icon={FiSearch}
-                        placeholder="Search by name or relavant keyword"
                         value={searchKeyword ?? ''}
+                        placeholder="Search by name or relavant keyword"
                         onChange={(e) => {
                             setSearchKeyword(e.target.value);
                         }}
@@ -150,31 +154,38 @@ function CompanyList() {
                                 }));
                             }
                         }}
+                        className="company-input-search"
                     />
-                    <DropdownFilter
-                        filters={filter.fType}
-                        onApply={(values) => {
-                            setFilter((prev) => ({ ...prev, fType: values }));
-                        }}
-                    />
-                    <RangeInput
-                        from={filter.marketCap.from}
-                        to={filter.marketCap.to}
-                        onApply={(from, to) => {
-                            setFilter((prev) => ({
-                                ...prev,
-                                marketCap: {
-                                    from,
-                                    to,
-                                },
-                            }));
-                        }}
-                    />
+                    <div className="sub-filter">
+                        <DropdownFilter
+                            filters={filter.fType}
+                            onApply={(values) => {
+                                setFilter((prev) => ({
+                                    ...prev,
+                                    fType: values,
+                                }));
+                            }}
+                        />
+                        <RangeInput
+                            from={filter.marketCap.from}
+                            to={filter.marketCap.to}
+                            onApply={(from, to) => {
+                                setFilter((prev) => ({
+                                    ...prev,
+                                    marketCap: {
+                                        from,
+                                        to,
+                                    },
+                                }));
+                            }}
+                        />
+                    </div>
                 </div>
                 <div className="content">
                     {companyList && companyList.length > 0 ? (
                         <Table hoverable>
                             <Table.Head>
+                                {isMobile && <Table.HeadCell></Table.HeadCell>}
                                 <TableHeaderSortable
                                     {...filter.sort.companyName}
                                     onClickSorting={() =>
@@ -191,7 +202,9 @@ function CompanyList() {
                                     }
                                     className="justify-end"
                                 />
-                                <Table.HeadCell>Actions</Table.HeadCell>
+                                {!isMobile && (
+                                    <Table.HeadCell>Actions</Table.HeadCell>
+                                )}
                             </Table.Head>
                             <Table.Body className="divide-y">
                                 {companyList.length > 0 &&
@@ -203,13 +216,47 @@ function CompanyList() {
                                                 navigateToDetail(company.id)
                                             }
                                         >
+                                            {isMobile && (
+                                                <Table.Cell className="whitespace-nowrap px-4">
+                                                    <div className="flex flex-col text-center">
+                                                        <img
+                                                            src="/favicon.ico"
+                                                            className="company-logo"
+                                                            alt="company logo"
+                                                        />
+                                                        <small>
+                                                            <Link
+                                                                to={`/company/detail/${company.id}`}
+                                                            >
+                                                                See info
+                                                            </Link>
+                                                        </small>
+                                                        <small>
+                                                            <Link
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.stopPropagation();
+                                                                    window.open(
+                                                                        company.url
+                                                                    );
+                                                                }}
+                                                            >
+                                                                Visit site
+                                                            </Link>
+                                                        </small>
+                                                    </div>
+                                                </Table.Cell>
+                                            )}
                                             <Table.Cell>
                                                 <div className="flex">
-                                                    <img
-                                                        src="/favicon.ico"
-                                                        className="company-logo"
-                                                        alt="company logo"
-                                                    />
+                                                    {!isMobile && (
+                                                        <img
+                                                            src="/favicon.ico"
+                                                            className="company-logo"
+                                                            alt="company logo"
+                                                        />
+                                                    )}
                                                     <div>
                                                         <h3>
                                                             {company.aliasName}
@@ -227,26 +274,28 @@ function CompanyList() {
                                                 {company.marketCapDisplay ||
                                                     'NA'}
                                             </Table.Cell>
-                                            <Table.Cell>
-                                                <div className="flex gap-1">
-                                                    <Link
-                                                        to={`/company/detail/${company.id}`}
-                                                    >
-                                                        See info
-                                                    </Link>
-                                                    {' | '}
-                                                    <Link
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            window.open(
-                                                                company.url
-                                                            );
-                                                        }}
-                                                    >
-                                                        Visit site
-                                                    </Link>
-                                                </div>
-                                            </Table.Cell>
+                                            {!isMobile && (
+                                                <Table.Cell>
+                                                    <div className="flex gap-1">
+                                                        <Link
+                                                            to={`/company/detail/${company.id}`}
+                                                        >
+                                                            See info
+                                                        </Link>
+                                                        {' | '}
+                                                        <Link
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                window.open(
+                                                                    company.url
+                                                                );
+                                                            }}
+                                                        >
+                                                            Visit site
+                                                        </Link>
+                                                    </div>
+                                                </Table.Cell>
+                                            )}
                                         </Table.Row>
                                     ))}
                             </Table.Body>

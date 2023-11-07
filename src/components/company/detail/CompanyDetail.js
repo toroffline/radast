@@ -11,7 +11,12 @@ import './CompanyDetail.css';
 
 function CompanyDetail() {
     const params = useParams();
-    const { setHeader, setLatestDisplayBreadcrumb } = useAppContext();
+    const {
+        setHeader,
+        isMobile,
+        setDisplayBackBtn,
+        setLatestDisplayBreadcrumb,
+    } = useAppContext();
     const [companyId, setCompanyId] = useState();
     const [companyDetail, setCompanyDetail] = useState();
 
@@ -19,6 +24,7 @@ function CompanyDetail() {
         async function getCompanyDetail(companyId) {
             const companyDetail = await companyService.getDetail(companyId);
             setHeader(companyDetail.fullName);
+            setDisplayBackBtn(true);
             setLatestDisplayBreadcrumb(companyDetail.fullName);
             setCompanyDetail({
                 ...companyDetail,
@@ -34,7 +40,15 @@ function CompanyDetail() {
 
     return (
         <>
-            <Card>
+            <Card
+                theme={{
+                    root: {
+                        children: isMobile
+                            ? 'w-full p-6 overflow-scroll'
+                            : 'flex h-full flex-col justify-center gap-4 p-6',
+                    },
+                }}
+            >
                 <div className="company-detail">
                     {companyDetail ? (
                         <>
@@ -49,7 +63,7 @@ function CompanyDetail() {
                                 <h2>General Information</h2>
                             </div>
 
-                            <div className="table">
+                            <div className="table overflow-scroll">
                                 <div className="cell cell-header">
                                     Full Name
                                 </div>
