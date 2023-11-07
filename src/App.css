@@ -1,6 +1,7 @@
 .app {
     display: flex;
     height: 100%;
+    font-size: 1rem;
 }
 
 .main {
@@ -17,15 +18,15 @@
 }
 
 h1 {
-    margin: 20px 0px 15px 0px;
-    font-size: 20px;
     @apply font-semibold;
+    margin: 20px 0px 15px 0px;
+    font-size: 1.3rem;
 }
 
 h2 {
-    margin: 2px 0px 15px 0px;
     @apply font-medium;
-    font-size: 18px;
+    margin: 2px 0px 15px 0px;
+    font-size: 1.1rem;
 }
 
 a {

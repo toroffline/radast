@@ -1,5 +1,6 @@
 import { Sidebar } from 'flowbite-react';
 import { FiBriefcase } from 'react-icons/fi';
+import './SideBar.css';
 
 const customTheme = {
     root: {

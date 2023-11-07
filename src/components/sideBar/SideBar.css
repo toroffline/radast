@@ -1,0 +1,3 @@
+.side-bar a {
+    @apply hover:no-underline !important;
+}
