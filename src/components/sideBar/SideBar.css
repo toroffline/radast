@@ -1,3 +1,18 @@
 .side-bar a {
-    @apply hover:no-underline !important;
+    @apply hover:no-underline;
+}
+
+.side-bar button.close {
+    @apply text-gray-400 
+bg-transparent 
+hover:bg-gray-200 
+hover:text-gray-900 
+rounded-lg 
+text-sm 
+p-1.5 
+absolute 
+top-4
+right-2.5 
+inline-flex 
+items-center;
 }

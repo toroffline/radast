@@ -1,5 +1,5 @@
 import { Sidebar } from 'flowbite-react';
-import { FiBriefcase } from 'react-icons/fi';
+import { FiBriefcase, FiX } from 'react-icons/fi';
 import './SideBar.css';
 
 const customTheme = {
@@ -11,9 +11,23 @@ const customTheme = {
 
 function SideBar() {
     return (
-        <Sidebar theme={customTheme} className="side-bar">
+        <Sidebar
+            theme={customTheme}
+            className="side-bar transition-transform left-0 top-0 -translate-x-full"
+            id="drawer-sidebar"
+        >
             <Sidebar.Logo href="/company/list" img="/favicon.ico">
                 <p>Radast</p>
+                <button
+                    type="button"
+                    data-drawer-hide="drawer-sidebar"
+                    className="close"
+                    onClick={(e) => {
+                        e.preventDefault();
+                    }}
+                >
+                    <FiX />
+                </button>
             </Sidebar.Logo>
             <Sidebar.Items>
                 <Sidebar.ItemGroup>
