@@ -29,7 +29,7 @@ function Router() {
     }
 
     return (
-        <HashRouter basename="/radast">
+        <HashRouter basename="">
             <AppProvider>
                 <Suspense fallback={<Loading />}>
                     <Routes>

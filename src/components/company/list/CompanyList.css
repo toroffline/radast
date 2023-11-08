@@ -35,3 +35,28 @@ tr {
 .no-data {
     @apply flex justify-center items-center w-full h-full;
 }
+
+.main-filter {
+    @apply flex flex-row gap-4;
+}
+
+.sub-filter {
+    @apply flex gap-4 whitespace-nowrap ml-auto;
+}
+
+@media (max-width: 767px) {
+    .main-filter {
+        @apply flex-col;
+    }
+
+    .sub-filter {
+        @apply ml-0;
+    }
+
+    .company-input-search {
+        @apply w-full;
+    }
+    .company-logo {
+        @apply mb-3 mr-0;
+    }
+}

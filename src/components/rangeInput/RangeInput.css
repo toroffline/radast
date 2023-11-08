@@ -1,0 +1,9 @@
+.range {
+    max-width: 135px;
+}
+
+button.apply {
+    @apply whitespace-nowrap;
+    width: 100px;
+    height: 35px;
+}

@@ -27,6 +27,8 @@ const AppProvider = ({ children }) => {
     const [header, setHeader] = useState();
     const [breadcrumb, setBreadcrumb] = useState();
     const [oneTimeRegister, setOneTimeRegister] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+    const [displayBackBtn, setDisplayBackBtn] = useState(false);
 
     function setLatestDisplayBreadcrumb(display) {
         breadcrumb &&
@@ -105,12 +107,26 @@ const AppProvider = ({ children }) => {
         }
     }, [pathname]);
 
+    useEffect(() => {
+        function handleResize() {
+            setIsMobile(window.innerWidth <= 767);
+        }
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     return (
         <AppContext.Provider
             value={{
                 header,
                 breadcrumb,
                 oneTimeRegister,
+                isMobile,
+                displayBackBtn,
+                setDisplayBackBtn,
                 setOneTimeRegister,
                 setHeader,
                 setLatestDisplayBreadcrumb,

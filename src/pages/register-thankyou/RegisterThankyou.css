@@ -1,4 +1,23 @@
-img {
+.register-thankyou-page {
+    @apply flex flex-col items-center justify-center w-full pt-4 text-center h-screen;
+    background: rgba(14, 116, 144, 0.6);
+}
+
+.register-thankyou-page p {
+    @apply mb-2;
+}
+
+.register-thankyou-page img {
     width: 200px;
     margin-bottom: 20px;
+}
+
+@media (max-width: 767px) {
+    .register-thankyou-page {
+        @apply p-4;
+    }
+
+    .register-thankyou-page p {
+        @apply mb-4;
+    }
 }

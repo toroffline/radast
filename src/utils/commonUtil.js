@@ -1,9 +1,16 @@
 const CommonUtil = {
-    isFalsyExceptZero: function (value) {
+    isNotFalsyExceptZero: function (value) {
         if (value === 0) {
             return true;
         } else {
-            return !!value;
+            return !value;
+        }
+    },
+    isFalsyIncludeZero: function (value) {
+        if (value === 0) {
+            return true;
+        } else {
+            return !value;
         }
     },
     sleep: async function sleep(ms) {
