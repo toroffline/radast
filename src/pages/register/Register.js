@@ -1,6 +1,6 @@
 import { Button, Card } from 'flowbite-react';
 import { useFormik } from 'formik';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import * as yup from 'yup';
 import CommonUtil from '../../utils/commonUtil';
@@ -87,14 +87,22 @@ function Register() {
         validateOnBlur: true,
         validateOnChange: true,
     });
-    const { values, errors, setValues, validateForm, setFieldValue } = form;
+    const {
+        values,
+        errors: actualErrors,
+        setValues,
+        validateForm,
+        setFieldValue,
+    } = form;
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [errors, setErrors] = useState({});
     const queryParams = new URLSearchParams(location.search);
 
     async function validate() {
         setIsSubmitted(true);
         await validateForm().then(async (errors) => {
+            setErrors(errors);
             if (!errors || CommonUtil.isObjectEmpty(errors)) {
                 setIsProcessing(true);
                 await userService
@@ -174,7 +182,7 @@ function Register() {
                             validate();
                         }}
                     >
-                        <div className="relative mb-6">
+                        <Field isError={!!errors['firstName']}>
                             <InputFloatingLabel
                                 label={fieldDisplay.firstName}
                                 value={form.values.firstName ?? ''}
@@ -189,9 +197,9 @@ function Register() {
                                 isSubmitted={isSubmitted}
                                 errors={errors['firstName']}
                             />
-                        </div>
+                        </Field>
 
-                        <div className="relative mb-6">
+                        <Field isError={!!errors['lastName']}>
                             <InputFloatingLabel
                                 label={fieldDisplay.lastName}
                                 value={form.values.lastName ?? ''}
@@ -206,9 +214,9 @@ function Register() {
                                 isSubmitted={isSubmitted}
                                 errors={errors['lastName']}
                             />
-                        </div>
+                        </Field>
 
-                        <div className="relative mb-6">
+                        <Field isError={!!errors['phone']}>
                             <InputFloatingLabel
                                 label={fieldDisplay.phone}
                                 value={form.values.phone ?? ''}
@@ -223,9 +231,9 @@ function Register() {
                                 isSubmitted={isSubmitted}
                                 errors={errors['phone']}
                             />
-                        </div>
+                        </Field>
 
-                        <div className="relative mb-6">
+                        <Field isError={!!errors['email']}>
                             <InputFloatingLabel
                                 label={fieldDisplay.email}
                                 value={form.values.email ?? ''}
@@ -240,9 +248,9 @@ function Register() {
                                 isSubmitted={isSubmitted}
                                 errors={errors['email']}
                             />
-                        </div>
+                        </Field>
 
-                        <div className="relative mb-6">
+                        <Field>
                             <InputFloatingLabel
                                 label={fieldDisplay.ref}
                                 value={form.values.ref ?? ''}
@@ -251,7 +259,7 @@ function Register() {
                                 }}
                                 disabled={isProcessing}
                             />
-                        </div>
+                        </Field>
 
                         <div className="text-center lg:text-left">
                             <div className="flex justify-center">
@@ -277,6 +285,15 @@ function Error(props) {
         <small className="text-red-600">{errors}</small>
     ) : (
         <></>
+    );
+}
+
+function Field(props) {
+    const { children, isError } = props;
+    return (
+        <div className={`relative ${isError ? 'mb-1' : 'mb-7'}`}>
+            {children}
+        </div>
     );
 }
 
