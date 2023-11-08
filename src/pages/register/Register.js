@@ -17,6 +17,14 @@ const defaultUserInfo = {
     ref: '',
 };
 
+const fieldDisplay = {
+    firstName: 'First name',
+    lastName: 'Last name',
+    phone: 'Phone number',
+    email: 'Email',
+    ref: 'Referral',
+};
+
 const commonError = {
     required: '{field} is required',
     notEmpty: '{field} is not empty',
@@ -25,19 +33,31 @@ const commonError = {
 
 const schemaError = {
     firstName: {
-        required: commonError.required.replace('{field}', 'firstName'),
-        notEmpty: commonError.notEmpty.replace('{field}', 'firstName'),
+        required: commonError.required.replace(
+            '{field}',
+            fieldDisplay.firstName
+        ),
+        notEmpty: commonError.notEmpty.replace(
+            '{field}',
+            fieldDisplay.firstName
+        ),
     },
     lastName: {
-        required: commonError.required.replace('{field}', 'lastName'),
-        notEmpty: commonError.notEmpty.replace('{field}', 'lastName'),
+        required: commonError.required.replace(
+            '{field}',
+            fieldDisplay.lastName
+        ),
+        notEmpty: commonError.notEmpty.replace(
+            '{field}',
+            fieldDisplay.lastName
+        ),
     },
     phone: {
-        required: commonError.required.replace('{field}', 'phone'),
+        required: commonError.required.replace('{field}', fieldDisplay.phone),
     },
     email: {
-        required: commonError.required.replace('{field}', 'email'),
-        invalid: commonError.invalid.replace('{field}', 'email'),
+        required: commonError.required.replace('{field}', fieldDisplay.email),
+        invalid: commonError.invalid.replace('{field}', fieldDisplay.email),
     },
 };
 
@@ -54,9 +74,12 @@ const schema = yup.object().shape({
         .email(schemaError.email.invalid),
 });
 
+const illustrationImgUrl =
+    'https://img.freepik.com/free-vector/businessman-holding-pencil-big-complete-checklist-with-tick-marks_1150-35019.jpg?w=740&t=st=1698810211~exp=1698810811~hmac=bea1e68ff31574f189c99df4ac39b2853e4dae2c7714aac9065d22adff5830d3';
+
 function Register() {
     const location = useLocation();
-    const { setOneTimeRegister } = useAppContext();
+    const { isMobile, setOneTimeRegister } = useAppContext();
     const form = useFormik({
         initialValues: defaultUserInfo,
         validationSchema: schema,
@@ -114,135 +137,135 @@ function Register() {
 
     return (
         <>
-            <section className="h-screen w-full">
-                <div className="h-full">
-                    <div className="g-6 flex h-full flex-wrap items-center justify-center xl:mb-4">
-                        <div className="infographic">
-                            <div className="text-wave">
-                                Prepare to <span style={{ ['--i']: 1 }}>R</span>
-                                <span style={{ ['--i']: 2 }}>a</span>
-                                <span style={{ ['--i']: 3 }}>d</span>
-                                <span style={{ ['--i']: 4 }}>a</span>
-                                <span style={{ ['--i']: 5 }}>s</span>
-                                <span style={{ ['--i']: 6 }}>t</span>
-                            </div>
-                            <img
-                                src="https://img.freepik.com/free-vector/businessman-holding-pencil-big-complete-checklist-with-tick-marks_1150-35019.jpg?w=740&t=st=1698810211~exp=1698810811~hmac=bea1e68ff31574f189c99df4ac39b2853e4dae2c7714aac9065d22adff5830d3"
-                                className="w-full"
-                                alt="register"
+            <section className="register-page">
+                <h1 className="text-white">Prepare to Radast 🚀</h1>
+                <Card
+                    imgSrc={isMobile ? undefined : illustrationImgUrl}
+                    horizontal={!isMobile}
+                    theme={{
+                        root: {
+                            base: 'flex rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800',
+                            horizontal: {
+                                on: 'flex-col md:flex-row',
+                            },
+                            children:
+                                'flex w-full h-full flex-col justify-center p-6',
+                        },
+                        img: {
+                            horizontal: {
+                                on: 'object-contain',
+                            },
+                        },
+                    }}
+                >
+                    {isMobile && (
+                        <img
+                            src={illustrationImgUrl}
+                            className="w-full"
+                            alt="register"
+                        />
+                    )}
+                    <h2 className="text-center">
+                        New users? Let's get you started!
+                    </h2>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            validate();
+                        }}
+                    >
+                        <div className="relative mb-6">
+                            <InputFloatingLabel
+                                label={fieldDisplay.firstName}
+                                value={form.values.firstName ?? ''}
+                                onChange={(value) => {
+                                    setFieldValue('firstName', value);
+                                }}
+                                color={getFieldStyle('firstName')}
+                                disabled={isProcessing}
+                            />
+                            <Error
+                                field="firstName"
+                                isSubmitted={isSubmitted}
+                                errors={errors['firstName']}
                             />
                         </div>
 
-                        <div className="register-form">
-                            <Card>
-                                <h2>New User ? Get Registered</h2>
-                                <form
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        validate();
-                                    }}
-                                >
-                                    <div className="relative mb-6">
-                                        <InputFloatingLabel
-                                            label="First name"
-                                            value={form.values.firstName ?? ''}
-                                            onChange={(value) => {
-                                                setFieldValue(
-                                                    'firstName',
-                                                    value
-                                                );
-                                            }}
-                                            color={getFieldStyle('firstName')}
-                                            disabled={isProcessing}
-                                        />
-                                        <Error
-                                            field="firstName"
-                                            isSubmitted={isSubmitted}
-                                            errors={errors['firstName']}
-                                        />
-                                    </div>
-
-                                    <div className="relative mb-6">
-                                        <InputFloatingLabel
-                                            label="Last name"
-                                            value={form.values.lastName ?? ''}
-                                            onChange={(value) => {
-                                                setFieldValue(
-                                                    'lastName',
-                                                    value
-                                                );
-                                            }}
-                                            color={getFieldStyle('lastName')}
-                                            disabled={isProcessing}
-                                        />
-                                        <Error
-                                            field="firstName"
-                                            isSubmitted={isSubmitted}
-                                            errors={errors['lastName']}
-                                        />
-                                    </div>
-
-                                    <div className="relative mb-6">
-                                        <InputFloatingLabel
-                                            label="Phone number"
-                                            value={form.values.phone ?? ''}
-                                            onChange={(value) => {
-                                                setFieldValue('phone', value);
-                                            }}
-                                            color={getFieldStyle('phone')}
-                                            disabled={isProcessing}
-                                        />
-                                        <Error
-                                            field="phone"
-                                            isSubmitted={isSubmitted}
-                                            errors={errors['phone']}
-                                        />
-                                    </div>
-
-                                    <div className="relative mb-6">
-                                        <InputFloatingLabel
-                                            label="Email"
-                                            value={form.values.email ?? ''}
-                                            onChange={(value) => {
-                                                setFieldValue('email', value);
-                                            }}
-                                            color={getFieldStyle('email')}
-                                            disabled={isProcessing}
-                                        />
-                                        <Error
-                                            field="email"
-                                            isSubmitted={isSubmitted}
-                                            errors={errors['email']}
-                                        />
-                                    </div>
-
-                                    <div className="relative mb-6">
-                                        <InputFloatingLabel
-                                            label="Ref."
-                                            value={form.values.ref ?? ''}
-                                            onChange={(value) => {
-                                                setFieldValue('ref', value);
-                                            }}
-                                            disabled={isProcessing}
-                                        />
-                                    </div>
-
-                                    <div className="text-center lg:text-left">
-                                        <div className="flex justify-center">
-                                            <Button
-                                                type="submit"
-                                                pill
-                                                isProcessing={isProcessing}
-                                            >
-                                                Register
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </Card>
+                        <div className="relative mb-6">
+                            <InputFloatingLabel
+                                label={fieldDisplay.lastName}
+                                value={form.values.lastName ?? ''}
+                                onChange={(value) => {
+                                    setFieldValue('lastName', value);
+                                }}
+                                color={getFieldStyle('lastName')}
+                                disabled={isProcessing}
+                            />
+                            <Error
+                                field="firstName"
+                                isSubmitted={isSubmitted}
+                                errors={errors['lastName']}
+                            />
                         </div>
-                    </div>
-                </div>
+
+                        <div className="relative mb-6">
+                            <InputFloatingLabel
+                                label={fieldDisplay.phone}
+                                value={form.values.phone ?? ''}
+                                onChange={(value) => {
+                                    setFieldValue('phone', value);
+                                }}
+                                color={getFieldStyle('phone')}
+                                disabled={isProcessing}
+                            />
+                            <Error
+                                field="phone"
+                                isSubmitted={isSubmitted}
+                                errors={errors['phone']}
+                            />
+                        </div>
+
+                        <div className="relative mb-6">
+                            <InputFloatingLabel
+                                label={fieldDisplay.email}
+                                value={form.values.email ?? ''}
+                                onChange={(value) => {
+                                    setFieldValue('email', value);
+                                }}
+                                color={getFieldStyle('email')}
+                                disabled={isProcessing}
+                            />
+                            <Error
+                                field="email"
+                                isSubmitted={isSubmitted}
+                                errors={errors['email']}
+                            />
+                        </div>
+
+                        <div className="relative mb-6">
+                            <InputFloatingLabel
+                                label={fieldDisplay.ref}
+                                value={form.values.ref ?? ''}
+                                onChange={(value) => {
+                                    setFieldValue('ref', value);
+                                }}
+                                disabled={isProcessing}
+                            />
+                        </div>
+
+                        <div className="text-center lg:text-left">
+                            <div className="flex justify-center">
+                                <Button
+                                    type="submit"
+                                    pill
+                                    isProcessing={isProcessing}
+                                >
+                                    Register
+                                </Button>
+                            </div>
+                        </div>
+                    </form>
+                </Card>
             </section>
         </>
     );
