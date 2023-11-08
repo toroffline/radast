@@ -11,11 +11,14 @@ import RangeInput from '../../rangeInput/RangeInput';
 import DropdownFilter from '../../dropdownFilter/DropdownFilter';
 
 import './CompanyList.css';
+import CommonUtil from '../../../utils/commonUtil';
 
 const defaultSorting = {
     isActive: false,
     direction: 'desc',
 };
+
+const defaultCompanyLogoSrc = CommonUtil.defaultCompanyLogoSrc;
 
 function CompanyList() {
     const navigate = useNavigate();
@@ -220,7 +223,9 @@ function CompanyList() {
                                                 <Table.Cell className="whitespace-nowrap px-4">
                                                     <div className="flex flex-col text-center">
                                                         <img
-                                                            src="/favicon.ico"
+                                                            src={
+                                                                defaultCompanyLogoSrc
+                                                            }
                                                             className="company-logo"
                                                             alt="company logo"
                                                         />
@@ -252,7 +257,9 @@ function CompanyList() {
                                                 <div className="flex">
                                                     {!isMobile && (
                                                         <img
-                                                            src="/favicon.ico"
+                                                            src={
+                                                                defaultCompanyLogoSrc
+                                                            }
                                                             className="company-logo"
                                                             alt="company logo"
                                                         />

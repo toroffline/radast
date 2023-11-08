@@ -1,4 +1,5 @@
 const CommonUtil = {
+    defaultCompanyLogoSrc: 'building.png',
     isNotFalsyExceptZero: function (value) {
         if (value === 0) {
             return true;

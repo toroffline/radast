@@ -16,7 +16,7 @@ function SideBar() {
             className="side-bar transition-transform left-0 top-0 -translate-x-full"
             id="drawer-sidebar"
         >
-            <Sidebar.Logo href="/company/list" img="/favicon.ico">
+            <Sidebar.Logo href="/company/list" img="radast.png">
                 <p>Radast</p>
                 <button
                     type="button"

@@ -146,7 +146,7 @@ function Register() {
     return (
         <>
             <section className="register-page">
-                <h1 className="text-white">Prepare to Radast 🚀</h1>
+                <h1 className="text-white">Prepare to Radast 📡</h1>
                 <Card
                     imgSrc={isMobile ? undefined : illustrationImgUrl}
                     horizontal={!isMobile}
