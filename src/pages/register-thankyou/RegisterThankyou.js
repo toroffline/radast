@@ -30,7 +30,7 @@ function RegisterThankyou() {
                         }}
                     >
                         <img src={illustrationImgUrl} alt="thank you" />
-                        <h1>Welcome to Radast 🚀</h1>
+                        <h1>Welcome to Radast 📡</h1>
                         <p>
                             Your registration has been successfully completed.
                         </p>
