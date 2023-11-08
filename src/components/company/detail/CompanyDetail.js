@@ -9,6 +9,8 @@ import Loading from '../../loading/Loading';
 import { useAppContext } from '../../../context/appContext';
 import './CompanyDetail.css';
 
+const defaultCompanyLogoSrc = CommonUtil.defaultCompanyLogoSrc;
+
 function CompanyDetail() {
     const params = useParams();
     const {
@@ -56,7 +58,7 @@ function CompanyDetail() {
                                 <Tooltip content="Company Logo">
                                     <img
                                         className="company-logo"
-                                        src="/favicon.ico"
+                                        src={defaultCompanyLogoSrc}
                                         alt="company logo"
                                     />
                                 </Tooltip>
