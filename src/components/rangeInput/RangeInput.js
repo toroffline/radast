@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button, Dropdown, TextInput } from 'flowbite-react';
 
 import CommonUtil from '../../utils/commonUtil';
@@ -8,16 +8,8 @@ import './RangeInput.css';
 
 function RangeInput(props) {
     const { from, to, onApply } = props;
-    const [_from, setFrom] = useState();
-    const [_to, setTo] = useState();
-
-    function handleInput(value, setFn) {
-        if (/^[0-9]*$/.test(value)) {
-            setFn((prev) => (prev ?? '') + value);
-        } else if (value === 'Backspace') {
-            setFn((prev) => prev.toString().slice(0, -1));
-        }
-    }
+    const [_from, setFrom] = useState(from);
+    const [_to, setTo] = useState(to);
 
     const dropdownDisplay = useMemo(() => {
         return CommonUtil.isFalsyIncludeZero(from) &&
@@ -28,25 +20,25 @@ function RangeInput(props) {
               }`;
     }, [from, to]);
 
-    useEffect(() => setFrom(from || ''), [from]);
-    useEffect(() => setTo(to || ''), [to]);
-
     return (
         <>
             <Dropdown dismissOnClick={true} label={dropdownDisplay}>
                 <div id={`range-input-menu`} className="p-3">
                     <div className="flex items-center">
                         <TextInput
+                            type="number"
                             placeholder="From"
-                            defaultValue={_from || ''}
-                            onKeyUp={(e) => handleInput(e.key, setFrom)}
+                            value={_from || ''}
+                            onChange={(e) => setFrom(e.target.value)}
+                            onKeyDown={(e) => e.stopPropagation()}
                             className="range"
                         />
                         <span className="mx-1"> — </span>
                         <TextInput
                             placeholder="To"
-                            defaultValue={_to || ''}
-                            onKeyUp={(e) => handleInput(e.key, setTo)}
+                            value={_to || ''}
+                            onChange={(e) => setTo(e.target.value)}
+                            onKeyDown={(e) => e.stopPropagation()}
                             className="range"
                         />
                     </div>
