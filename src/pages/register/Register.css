@@ -3,9 +3,8 @@
     background: rgba(14, 116, 144, 0.6);
 }
 
-.infographic {
-    padding: 2rem;
-    @apply text-center grow-0 basis-auto md:mb-0 md:w-9/12 md:shrink-0 lg:w-6/12 xl:w-6/12;
+.register-form {
+    width: 28rem;
 }
 
 @media (max-width: 767px) {
@@ -14,6 +13,9 @@
     }
     .register-page h2 {
         @apply text-gray-700;
+    }
+    .register-form {
+        @apply w-full;
     }
     .infographic {
         padding: 1rem;

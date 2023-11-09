@@ -102,7 +102,7 @@ function Register() {
     async function validate() {
         setIsSubmitted(true);
         await validateForm().then(async (errors) => {
-            setErrors(errors);
+            setErrors(actualErrors);
             if (!errors || CommonUtil.isObjectEmpty(errors)) {
                 setIsProcessing(true);
                 await userService
@@ -128,6 +128,12 @@ function Register() {
     );
 
     useEffect(() => {
+        if (isSubmitted) {
+            setErrors(actualErrors);
+        }
+    }, [isSubmitted, actualErrors]);
+
+    useEffect(() => {
         const firstName = queryParams.get('firstName') ?? '';
         const lastName = queryParams.get('lastName') ?? '';
         const phone = queryParams.get('phone') ?? '';
@@ -146,22 +152,21 @@ function Register() {
     return (
         <>
             <section className="register-page">
-                <h1 className="text-white">Prepare to Radast 📡</h1>
                 <Card
                     imgSrc={isMobile ? undefined : illustrationImgUrl}
                     horizontal={!isMobile}
                     theme={{
                         root: {
-                            base: 'flex rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800',
+                            base: 'flex rounded-lg border border-gray-200 bg-white shadow-md',
                             horizontal: {
                                 on: 'flex-col md:flex-row',
                             },
                             children:
-                                'flex w-full h-full flex-col justify-center p-6',
+                                'flex register-form h-full flex-col justify-center p-6',
                         },
                         img: {
                             horizontal: {
-                                on: 'object-contain',
+                                on: 'rounded-t-lg object-none md:w-72 md:rounded-none md:rounded-l-lg',
                             },
                         },
                     }}
@@ -173,8 +178,9 @@ function Register() {
                             alt="register"
                         />
                     )}
-                    <h2 className="text-center">
-                        New users? Let's get you started!
+                    <h1 className="text-2xl">Prepare to Radast 📡</h1>
+                    <h2 className="text-left font-bold">
+                        New user? Let's get you started!
                     </h2>
                     <form
                         onSubmit={(e) => {
@@ -185,6 +191,7 @@ function Register() {
                         <Field isError={!!errors['firstName']}>
                             <InputFloatingLabel
                                 label={fieldDisplay.firstName}
+                                placeholder="Enter your first name"
                                 value={form.values.firstName ?? ''}
                                 onChange={(value) => {
                                     setFieldValue('firstName', value);
@@ -202,6 +209,7 @@ function Register() {
                         <Field isError={!!errors['lastName']}>
                             <InputFloatingLabel
                                 label={fieldDisplay.lastName}
+                                placeholder="Enter your last name"
                                 value={form.values.lastName ?? ''}
                                 onChange={(value) => {
                                     setFieldValue('lastName', value);
@@ -219,6 +227,7 @@ function Register() {
                         <Field isError={!!errors['phone']}>
                             <InputFloatingLabel
                                 label={fieldDisplay.phone}
+                                placeholder="0901234567"
                                 value={form.values.phone ?? ''}
                                 onChange={(value) => {
                                     setFieldValue('phone', value);
@@ -236,6 +245,7 @@ function Register() {
                         <Field isError={!!errors['email']}>
                             <InputFloatingLabel
                                 label={fieldDisplay.email}
+                                placeholder="email@test.com"
                                 value={form.values.email ?? ''}
                                 onChange={(value) => {
                                     setFieldValue('email', value);
@@ -253,6 +263,7 @@ function Register() {
                         <Field>
                             <InputFloatingLabel
                                 label={fieldDisplay.ref}
+                                placeholder="010A9999"
                                 value={form.values.ref ?? ''}
                                 onChange={(value) => {
                                     setFieldValue('ref', value);
@@ -267,6 +278,7 @@ function Register() {
                                     type="submit"
                                     pill
                                     isProcessing={isProcessing}
+                                    className="w-full"
                                 >
                                     Register
                                 </Button>

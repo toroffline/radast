@@ -1,14 +1,18 @@
 .register-thankyou-page {
     @apply flex flex-col items-center justify-center w-full pt-4 text-center h-screen;
-    background: rgba(14, 116, 144, 0.6);
 }
 
-.register-thankyou-page p {
+.register-thankyou-page h1 {
+    font-size: 3rem;
     @apply mb-2;
 }
 
+.register-thankyou-page p {
+    font-size: 0.75rem;
+}
+
 .register-thankyou-page img {
-    width: 200px;
+    @apply w-80;
     margin-bottom: 20px;
 }
 
