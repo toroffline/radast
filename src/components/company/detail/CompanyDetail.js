@@ -54,7 +54,7 @@ function CompanyDetail() {
                 <div className="company-detail">
                     {companyDetail ? (
                         <>
-                            <div className="flex">
+                            <div className="flex flex-row header">
                                 <Tooltip content="Company Logo">
                                     <img
                                         className="company-logo"

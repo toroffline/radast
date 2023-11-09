@@ -1,8 +1,18 @@
-import { useId } from 'react';
+import { useId, useState } from 'react';
 import './FloatingLabel.css';
 
 function InputFloatingLabel(props) {
-    const { label, id, type, value, onChange, color, disabled } = props;
+    const {
+        label,
+        id,
+        type,
+        value,
+        placeholder: _placeholder,
+        onChange,
+        color,
+        disabled,
+    } = props;
+    const [placeholder, setPlaceholder] = useState(' ');
     const randomId = useId();
 
     return (
@@ -10,11 +20,13 @@ function InputFloatingLabel(props) {
             <input
                 type={type ?? 'text'}
                 value={value}
-                onChange={(e) => onChange(e.target.value)}
                 id={id ? `floating-label-${id}` : `floating-label-${randomId}`}
                 className={`floating-label peer ${color || ''}`}
-                placeholder=" "
+                placeholder={placeholder}
                 disabled={disabled}
+                onChange={(e) => onChange(e.target.value)}
+                onFocus={() => setPlaceholder(_placeholder)}
+                onBlur={() => setPlaceholder(' ')}
             />
 
             <label

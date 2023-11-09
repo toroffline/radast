@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, Table, TextInput } from 'flowbite-react';
-import { FiArrowDown, FiArrowUp, FiSearch } from 'react-icons/fi';
+import {
+    FiAlertCircle,
+    FiArrowDown,
+    FiArrowUp,
+    FiSearch,
+} from 'react-icons/fi';
 
 import { useAppContext } from '../../../context/appContext';
 import companyService from '../../../services/companyService';
@@ -184,7 +189,13 @@ function CompanyList() {
                         />
                     </div>
                 </div>
-                <div className="content">
+                <div
+                    className={`content ${
+                        !companyList || companyList.length === 0
+                            ? 'processing'
+                            : ''
+                    }`}
+                >
                     {companyList && companyList.length > 0 ? (
                         <Table hoverable>
                             <Table.Head>
@@ -310,7 +321,14 @@ function CompanyList() {
                     ) : (
                         <>
                             {!isProcessing && (
-                                <div className="no-data">There is no data</div>
+                                <div className="no-data">
+                                    <FiAlertCircle className="icon" />
+                                    <h3 className="mb-0">No data found</h3>
+                                    <small>
+                                        Check your spelling or try other
+                                        keywords
+                                    </small>
+                                </div>
                             )}
                         </>
                     )}

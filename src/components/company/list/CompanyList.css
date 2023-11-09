@@ -29,11 +29,18 @@ tr {
 
 .content {
     @apply relative;
-    min-height: 300px;
+}
+
+.content.processing {
+    min-height: 200px;
 }
 
 .no-data {
-    @apply flex justify-center items-center w-full h-full;
+    @apply flex flex-col justify-center items-center w-full h-full text-gray-400;
+}
+
+.no-data .icon {
+    font-size: 8rem;
 }
 
 .main-filter {

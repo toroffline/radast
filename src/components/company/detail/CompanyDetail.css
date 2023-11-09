@@ -41,10 +41,10 @@
     min-height: 50vh;
     background-color: #fff;
     border-radius: 5px;
-    padding: 20px;
+    padding: 0 20px 20px;
 }
 
-.company-detail header {
+.company-detail .header {
     margin-bottom: 1rem;
 }
 
